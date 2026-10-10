@@ -224,16 +224,7 @@ print("Five or less")</textarea>
   });
   $("round1").addEventListener("click", () => { if (!running) showRound(1); });
   $("round2").addEventListener("click", () => { if (!running) showRound(2); });
-  // Do not add Tab indentation, auto-pairing, autocomplete, or syntax repair.
-  $("code").addEventListener("keydown", (event) => {
-    if (event.key === "Tab") {
-      event.preventDefault();
-      const el = event.currentTarget;
-      const start = el.selectionStart;
-      const end = el.selectionEnd;
-      el.setRangeText("    ", start, end, "end");
-    }
-  });
+  // Plain textarea intentionally has no indentation, autocomplete, or bracket-pair helpers.
   updateTimer();
   startTimer();
   spawnWorker();
