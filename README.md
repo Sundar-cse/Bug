@@ -1,6 +1,6 @@
-# CodeCheck — Debugging Arena
+# BUG-404 — Debugging Arena
 
-A first prototype for the college Python debugging event.
+A first prototype for the college  debugging event named falcon 2026
 
 ## Files
 - `index.html` — participant interface, two sample rounds, countdown, plain editor, output/error panel.
@@ -15,12 +15,7 @@ Then visit http://localhost:8000.
 
 The browser needs internet access to download Pyodide from its CDN on first load.
 
-## Publish with GitHub Pages
-1. Open the repository's **Settings**.
-2. Select **Pages**.
-3. Under **Build and deployment**, choose **Deploy from a branch**.
-4. Select branch `main` and folder `/ (root)`, then save.
-5. Wait for deployment, then open the URL shown in the Pages settings.
+
 
 ## Important: not ready for live competition
 This is an editor/runtime prototype only. It does not yet authenticate participants, securely store submissions, score hidden test cases, or provide an organizer dashboard. The round buttons and client-side timer are only for demonstration and can be reset or manipulated by a participant. Add server-side timing, validation, scoring, and persistent results before using it for official marks.
