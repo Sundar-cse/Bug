@@ -101,7 +101,7 @@ print("Five or less")</textarea>
       text: "The program should print the second-largest DISTINCT value in the list. The list may contain repeated values, and the current program fails on that case.",
       hint: "Check how repeated maximum values affect the second-largest value.",
       difficulty: "HARD",
-      code: 'numbers = [12, 7, 19, 19, 4, 15]\nlargest = numbers[0]\nsecond_largest = numbers[0]\n\nfor number in numbers:\n    if number > largest:\n        second_largest = largest\n        largest = number\n    elif number > second_largest:\n        second_largest = number\n\nprint(second_largest)'
+      code: 'numbers = [12, 7, 19, 19, 4, 15]\nlargest = numbers[0]\nsecond_largest = float("-inf")\n\nfor number in numbers:\n    if number > largest:\n        second_largest = largest\n        largest = number\n    elif number > second_largest:\n        second_largest = number\n\nprint(second_largest)'
     }
   };
   let currentQuestion = 1;
