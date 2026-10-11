@@ -218,8 +218,8 @@ print("Five or less")</textarea>
     const text = runOutput.join("");
     if (submitting) {
       submitting = false;
-      const expected = {1:"Greater\\n", 2:"15\\n", 3:"15\\n"}[currentQuestion];
-      if (!hasError && text.trimEnd() === expected.trimEnd()) {
+      const expected = {1:"Greater", 2:"15", 3:"15"}[currentQuestion];
+      if (!hasError && text.trim() === expected) {
         solved[currentQuestion] = true;
         printOutput("Correct answer! Challenge cleared.");
         setStatus("CORRECT", "ready");
