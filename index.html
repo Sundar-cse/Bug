@@ -41,7 +41,9 @@
 
   <section class="participant-fields" aria-label="Participant details">
     <div><label for="participantName">PARTICIPANT NAME</label><input id="participantName" type="text" maxlength="100" autocomplete="name" placeholder="Enter participant name" required></div>
-    <div><label for="participantTeam">TEAM / REGISTER NUMBER</label><input id="participantTeam" type="text" maxlength="100" autocomplete="off" placeholder="Enter team or register number"></div>
+    <div><label for="participantTeam">REGISTER NUMBER</label><input id="participantTeam" type="text" maxlength="100" autocomplete="off" placeholder="Enter register number" required></div>
+    <div><label for="participantDepartment">DEPARTMENT</label><input id="participantDepartment" type="text" maxlength="100" autocomplete="organization-title" placeholder="Enter department" required></div>
+    <div><label for="participantCollege">COLLEGE</label><input id="participantCollege" type="text" maxlength="150" autocomplete="organization" placeholder="Enter college name" required></div>
   </section>
 
   <div class="rounds" role="group" aria-label="Choose challenge">
@@ -79,7 +81,7 @@ print("Five or less")</textarea>
       <div class="output"><div class="outputhead"><span>OUTPUT / ERROR</span><span class="status ready" id="status">RUNTIME LOADING…</span></div><pre id="output" aria-live="polite">Preparing Python runtime. This may take a few seconds on first load…</pre></div>
     </section>
   </section>
-  <p class="bottomnote">Prototype for the BUG-404 college debugging event. The Python runtime loads from a CDN, so an internet connection is required. Do not use this prototype for live scoring until participant identity, secure submissions, and organiser results have been added and tested.</p>
+  <p class="bottomnote">BUG-404 Python debugging challenge. An internet connection is required to load the Python runtime and submit results. Use your correct participant details; organisers should test the Google Sheet scoring before the live event.</p>
 </main>
 <script>
 (() => {
@@ -249,9 +251,15 @@ print("Five or less")</textarea>
   function sendSubmission(status, output, code) {
     const name = $("participantName").value.trim();
     const team = $("participantTeam").value.trim();
+    const department = $("participantDepartment").value.trim();
+    const college = $("participantCollege").value.trim();
+    const timeTaken = Object.keys(timeLeft).reduce((total, id) => total + (600 - timeLeft[id]), 0);
     const payload = {
       name,
       team,
+      department,
+      college,
+      timeTaken,
       round: tasks[currentQuestion].round,
       question: tasks[currentQuestion].title,
       code: code || "",
@@ -267,11 +275,20 @@ print("Five or less")</textarea>
   }
 
   function executeCode(isSubmission) {
-    if (isSubmission && !$("participantName").value.trim()) {
-      printOutput("Enter your participant name before submitting.");
-      setStatus("NAME REQUIRED", "error");
-      $("participantName").focus();
-      return;
+    if (isSubmission) {
+      const requiredFields = [
+        ["participantName", "participant name"],
+        ["participantTeam", "register number"],
+        ["participantDepartment", "department"],
+        ["participantCollege", "college name"]
+      ];
+      const missing = requiredFields.find(([id]) => !$(id).value.trim());
+      if (missing) {
+        printOutput("Enter your " + missing[1] + " before submitting.");
+        setStatus("DETAILS REQUIRED", "error");
+        $(missing[0]).focus();
+        return;
+      }
     }
     if (!ready || running || seconds <= 0 || (isSubmission && solved[currentQuestion])) return;
     submitting = isSubmission;
