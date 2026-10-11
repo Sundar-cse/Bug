@@ -22,10 +22,10 @@
     .question{padding:19px}.question h3{font-size:20px;margin:0 0 10px}.question p{color:var(--muted);margin:0 0 16px}.info{background:#111a11;border-left:3px solid var(--green2);padding:12px;color:#d8e5c8;font-size:13px}.info strong{color:var(--green)}.rules{padding-left:18px;color:var(--muted);font-size:13px}.rules li{margin:7px 0}.rules li::marker{color:var(--green2)}
     .editorhead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 15px;border-bottom:1px solid var(--line);background:#202f1e}.dots{display:flex;gap:6px}.dots i{width:8px;height:8px;border-radius:1px;background:var(--green2)}.file{font:12px ui-monospace,monospace;color:var(--muted);margin-left:9px}.editorlabel{display:flex;align-items:center}
     textarea{display:block;width:100%;height:340px;resize:vertical;border:0;outline:0;background:#0b120b;color:#dff8c9;padding:19px;font:14px/1.75 ui-monospace,SFMono-Regular,Consolas,monospace;tab-size:4;white-space:pre;overflow:auto;border-bottom:1px solid var(--line);border-radius:0;caret-color:var(--green)}
-    .actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:13px 15px;background:#172117}.btn{border:1px solid #496342;border-radius:3px;padding:10px 15px;font-weight:800;font-size:12px;letter-spacing:.3px;cursor:pointer;color:var(--text);background:#263825}.btn.primary{background:var(--green);border-color:var(--green);color:#14200e}.btn.submit{background:#d9eac3;border-color:#d9eac3;color:#15210f}.btn:disabled{opacity:.55;cursor:wait}.hint{font-size:11px;color:var(--muted);margin-left:auto}
+    .participant-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0 8px;padding:14px;border:1px solid var(--line);background:#172117}.participant-fields label{display:block;color:var(--muted);font-size:11px;font-weight:800;letter-spacing:1px;margin-bottom:5px}.participant-fields input{width:100%;min-width:0;padding:10px 11px;border:1px solid var(--line);border-radius:3px;background:#0b120b;color:var(--text);font:14px system-ui,sans-serif}.participant-fields input:focus{outline:2px solid var(--green2);outline-offset:1px}.actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:13px 15px;background:#172117}.btn{border:1px solid #496342;border-radius:3px;padding:10px 15px;font-weight:800;font-size:12px;letter-spacing:.3px;cursor:pointer;color:var(--text);background:#263825}.btn.primary{background:var(--green);border-color:var(--green);color:#14200e}.btn.submit{background:#d9eac3;border-color:#d9eac3;color:#15210f}.btn:disabled{opacity:.55;cursor:wait}.hint{font-size:11px;color:var(--muted);margin-left:auto}
     .output{border-top:1px solid var(--line)}.outputhead{padding:11px 15px;display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:11px;letter-spacing:1px}.status{font-size:10px;font-weight:900;letter-spacing:.5px}.status.ready{color:var(--green)}.status.error{color:var(--red)}.status.running{color:var(--orange)}pre{margin:0;min-height:86px;max-height:190px;overflow:auto;padding:14px 16px 17px;background:#0b120b;color:#d8e5c8;font:13px/1.6 ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere}.bottomnote{margin:19px 2px;color:var(--muted);font-size:12px}
     @media(max-width:780px){.intro{align-items:flex-start}.workspace{grid-template-columns:1fr}.rounds{grid-template-columns:1fr;margin:18px 0}.timer{min-width:98px;padding:9px}.timer strong{font-size:23px}textarea{height:300px}}
-    @media(max-width:480px){header{padding:13px 15px}.tag{display:none}main{padding:23px 12px 40px}.intro{display:block}.timer{display:inline-block;margin-top:14px}.round{padding:11px;gap:9px}.round .num{width:31px;height:31px}.round small{font-size:11px}.hint{width:100%;margin-left:0}.actions .btn{flex:1}}
+    @media(max-width:480px){header{padding:13px 15px}.tag{display:none}main{padding:23px 12px 40px}.intro{display:block}.timer{display:inline-block;margin-top:14px}.round{padding:11px;gap:9px}.round .num{width:31px;height:31px}.round small{font-size:11px}.hint{width:100%;margin-left:0}.actions .btn{flex:1}.participant-fields{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -37,6 +37,11 @@
   <section class="intro">
     <div><div class="eyebrow">Find it. Fix it.</div><h1>Find it. Fix it.</h1><p class="sub">Read the task, repair the buggy program, and run your code. Each challenge has its own 10-minute timer.</p></div>
     <div class="timer" aria-live="polite"><span>Time remaining</span><strong id="timer">10:00</strong></div>
+  </section>
+
+  <section class="participant-fields" aria-label="Participant details">
+    <div><label for="participantName">PARTICIPANT NAME</label><input id="participantName" type="text" maxlength="100" autocomplete="name" placeholder="Enter participant name" required></div>
+    <div><label for="participantTeam">TEAM / REGISTER NUMBER</label><input id="participantTeam" type="text" maxlength="100" autocomplete="off" placeholder="Enter team or register number"></div>
   </section>
 
   <div class="rounds" role="group" aria-label="Choose challenge">
@@ -117,6 +122,7 @@ print("Five or less")</textarea>
   let runOutput = [];
   let runHadError = false;
   let runTimer = null;
+  let submittedCode = "";
 
   function setStatus(text, kind) {
     $("status").textContent = text;
@@ -219,7 +225,9 @@ print("Five or less")</textarea>
     if (submitting) {
       submitting = false;
       const expected = {1:"Greater", 2:"15", 3:"15"}[currentQuestion];
-      if (!hasError && text.trim() === expected) {
+      const isCorrect = !hasError && text.trim() === expected;
+      sendSubmission(isCorrect ? "CORRECT" : "INCORRECT", text, submittedCode);
+      if (isCorrect) {
         solved[currentQuestion] = true;
         printOutput("Correct answer! Challenge cleared.");
         setStatus("CORRECT", "ready");
@@ -238,9 +246,36 @@ print("Five or less")</textarea>
     $("runBtn").disabled = !ready || seconds <= 0;
     if (!solved[currentQuestion]) $("submitBtn").disabled = !ready || seconds <= 0;
   }
+  function sendSubmission(status, output, code) {
+    const name = $("participantName").value.trim();
+    const team = $("participantTeam").value.trim();
+    const payload = {
+      name,
+      team,
+      round: tasks[currentQuestion].round,
+      question: tasks[currentQuestion].title,
+      code: code || "",
+      output: output || "",
+      status
+    };
+    fetch("https://script.google.com/macros/s/AKfycbzOxCk9jyadUaRpwghFJVx4D3mSMAY_NsJUJ64ITe91QZ1Ry9YFSCvtVX95uI-oKSk/exec", {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    }).catch((error) => console.error("Could not send submission to Google Sheets:", error));
+  }
+
   function executeCode(isSubmission) {
+    if (isSubmission && !$("participantName").value.trim()) {
+      printOutput("Enter your participant name before submitting.");
+      setStatus("NAME REQUIRED", "error");
+      $("participantName").focus();
+      return;
+    }
     if (!ready || running || seconds <= 0 || (isSubmission && solved[currentQuestion])) return;
     submitting = isSubmission;
+    submittedCode = $("code").value;
     running = true;
     runOutput = [];
     runHadError = false;
