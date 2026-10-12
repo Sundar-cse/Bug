@@ -23,7 +23,7 @@
     .editorhead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 15px;border-bottom:1px solid var(--line);background:#202f1e}.dots{display:flex;gap:6px}.dots i{width:8px;height:8px;border-radius:1px;background:var(--green2)}.file{font:12px ui-monospace,monospace;color:var(--muted);margin-left:9px}.editorlabel{display:flex;align-items:center}
     textarea{display:block;width:100%;height:340px;resize:vertical;border:0;outline:0;background:#0b120b;color:#dff8c9;padding:19px;font:14px/1.75 ui-monospace,SFMono-Regular,Consolas,monospace;tab-size:4;white-space:pre;overflow:auto;border-bottom:1px solid var(--line);border-radius:0;caret-color:var(--green)}
     .participant-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0 8px;padding:14px;border:1px solid var(--line);background:#172117}.participant-fields label{display:block;color:var(--muted);font-size:11px;font-weight:800;letter-spacing:1px;margin-bottom:5px}.participant-fields input{width:100%;min-width:0;padding:10px 11px;border:1px solid var(--line);border-radius:3px;background:#0b120b;color:var(--text);font:14px system-ui,sans-serif}.participant-fields input:focus{outline:2px solid var(--green2);outline-offset:1px}.actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:13px 15px;background:#172117}.btn{border:1px solid #496342;border-radius:3px;padding:10px 15px;font-weight:800;font-size:12px;letter-spacing:.3px;cursor:pointer;color:var(--text);background:#263825}.btn.primary{background:var(--green);border-color:var(--green);color:#14200e}.btn.submit{background:#d9eac3;border-color:#d9eac3;color:#15210f}.btn:disabled{opacity:.55;cursor:wait}.hint{font-size:11px;color:var(--muted);margin-left:auto}
-    .output{border-top:1px solid var(--line)}.outputhead{padding:11px 15px;display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:11px;letter-spacing:1px}.status{font-size:10px;font-weight:900;letter-spacing:.5px}.status.ready{color:var(--green)}.status.error{color:var(--red)}.status.running{color:var(--orange)}pre{margin:0;min-height:86px;max-height:190px;overflow:auto;padding:14px 16px 17px;background:#0b120b;color:#d8e5c8;font:13px/1.6 ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere}.bottomnote{margin:19px 2px;color:var(--muted);font-size:12px}
+    .output{border-top:1px solid var(--line)}.outputhead{padding:11px 15px;display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:11px;letter-spacing:1px}.status{font-size:10px;font-weight:900;letter-spacing:.5px}.status.ready{color:var(--green)}.status.error{color:var(--red)}.status.running{color:var(--orange)}pre{margin:0;min-height:86px;max-height:190px;overflow:auto;padding:14px 16px 17px;background:#0b120b;color:#d8e5c8;font:13px/1.6 ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere}.leaderboard{margin:20px 0 24px;background:#172117;border:1px solid var(--line);box-shadow:4px 4px 0 #111a10;overflow:hidden}.leaderboard-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 17px;background:#202f1e;border-bottom:1px solid var(--line)}.leaderboard-head h2{font-size:12px;letter-spacing:1.4px;margin:0}.leaderboard-wrap{overflow-x:auto}.leaderboard table{width:100%;border-collapse:collapse;min-width:470px;text-align:left;font-size:13px}.leaderboard th,.leaderboard td{padding:11px 14px;border-bottom:1px solid #30452d}.leaderboard th{color:var(--muted);font-size:10px;letter-spacing:1px;background:#111a11}.leaderboard td{color:var(--text)}.leaderboard td.score{color:var(--green);font-weight:900}.leaderboard-empty{padding:16px;color:var(--muted);font-size:13px}.leaderboard-actions{display:flex;align-items:center;gap:10px}.leaderboard-actions .btn{padding:7px 10px}.leaderboard-status{font-size:11px;color:var(--muted)}.bottomnote{margin:19px 2px;color:var(--muted);font-size:12px}
     @media(max-width:780px){.intro{align-items:flex-start}.workspace{grid-template-columns:1fr}.rounds{grid-template-columns:1fr;margin:18px 0}.timer{min-width:98px;padding:9px}.timer strong{font-size:23px}textarea{height:300px}}
     @media(max-width:480px){header{padding:13px 15px}.tag{display:none}main{padding:23px 12px 40px}.intro{display:block}.timer{display:inline-block;margin-top:14px}.round{padding:11px;gap:9px}.round .num{width:31px;height:31px}.round small{font-size:11px}.hint{width:100%;margin-left:0}.actions .btn{flex:1}.participant-fields{grid-template-columns:1fr}}
   </style>
@@ -51,6 +51,19 @@
     <button class="round" id="question2" aria-pressed="false"><span class="num">02</span><span><strong>Round 1 · Medium</strong><small>Repair the total · 10 minutes</small></span></button>
     <button class="round" id="question3" aria-pressed="false"><span class="num">03</span><span><strong>Round 2 · Hard</strong><small>Find the second-largest value · 10 minutes</small></span></button>
   </div>
+
+  <section class="leaderboard" aria-labelledby="leaderboardTitle">
+    <div class="leaderboard-head">
+      <h2 id="leaderboardTitle">LIVE LEADERBOARD</h2>
+      <div class="leaderboard-actions"><span class="leaderboard-status" id="leaderboardStatus">Loading scores…</span><button class="btn" id="refreshLeaderboard" type="button">↻ Refresh</button></div>
+    </div>
+    <div class="leaderboard-wrap">
+      <table>
+        <thead><tr><th>RANK</th><th>PARTICIPANT</th><th>COLLEGE</th><th>SCORE</th><th>PERCENTAGE</th></tr></thead>
+        <tbody id="leaderboardRows"><tr><td colspan="5" class="leaderboard-empty">Loading leaderboard…</td></tr></tbody>
+      </table>
+    </div>
+  </section>
 
   <section class="workspace">
     <aside class="card">
@@ -248,6 +261,64 @@ print("Five or less")</textarea>
     $("runBtn").disabled = !ready || seconds <= 0;
     if (!solved[currentQuestion]) $("submitBtn").disabled = !ready || seconds <= 0;
   }
+  const SHEETS_ENDPOINT = "https://script.google.com/macros/s/AKfycbzOxCk9jyadUaRpwghFJVx4D3mSMAY_NsJUJ64ITe91QZ1Ry9YFSCvtVX95uI-oKSk/exec";
+  let leaderboardCallbackId = 0;
+
+  function loadLeaderboard() {
+    const rows = $("leaderboardRows");
+    const status = $("leaderboardStatus");
+    status.textContent = "Refreshing…";
+    const callbackName = "__bug404Leaderboard" + (++leaderboardCallbackId);
+    const script = document.createElement("script");
+    const timeout = setTimeout(() => {
+      cleanup();
+      status.textContent = "Could not load";
+      rows.innerHTML = '<tr><td colspan="5" class="leaderboard-empty">Leaderboard unavailable. Check the Apps Script doGet setup and try Refresh.</td></tr>';
+    }, 10000);
+    function cleanup() {
+      clearTimeout(timeout);
+      delete window[callbackName];
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+    window[callbackName] = (data) => {
+      cleanup();
+      if (!data || data.success !== true || !Array.isArray(data.rows)) {
+        status.textContent = "Setup needed";
+        rows.innerHTML = '<tr><td colspan="5" class="leaderboard-empty">Leaderboard endpoint needs to return JSON rows. See the setup instructions.</td></tr>';
+        return;
+      }
+      const sorted = data.rows.slice().sort((a, b) =>
+        (Number(b.score) || 0) - (Number(a.score) || 0) ||
+        (Number(b.percentage) || 0) - (Number(a.percentage) || 0)
+      );
+      rows.replaceChildren();
+      if (!sorted.length) {
+        rows.innerHTML = '<tr><td colspan="5" class="leaderboard-empty">No scores yet. Be the first to finish!</td></tr>';
+      } else {
+        sorted.forEach((person, index) => {
+          const tr = document.createElement("tr");
+          [String(index + 1), person.name || "Participant", person.college || "—",
+            (Number(person.score) || 0) + " / 30",
+            (Number(person.percentage) || 0).toFixed(2) + "%"].forEach((value, cellIndex) => {
+              const td = document.createElement("td");
+              td.textContent = value;
+              if (cellIndex === 3) td.className = "score";
+              tr.appendChild(td);
+            });
+          rows.appendChild(tr);
+        });
+      }
+      status.textContent = sorted.length + " participant" + (sorted.length === 1 ? "" : "s");
+    };
+    script.onerror = () => {
+      cleanup();
+      status.textContent = "Could not load";
+      rows.innerHTML = '<tr><td colspan="5" class="leaderboard-empty">Could not reach the leaderboard. Check the Apps Script deployment URL.</td></tr>';
+    };
+    script.src = SHEETS_ENDPOINT + "?callback=" + encodeURIComponent(callbackName) + "&_=" + Date.now();
+    document.head.appendChild(script);
+  }
+
   function sendSubmission(status, output, code) {
     const name = $("participantName").value.trim();
     const team = $("participantTeam").value.trim();
@@ -266,7 +337,7 @@ print("Five or less")</textarea>
       output: output || "",
       status
     };
-    fetch("https://script.google.com/macros/s/AKfycbzOxCk9jyadUaRpwghFJVx4D3mSMAY_NsJUJ64ITe91QZ1Ry9YFSCvtVX95uI-oKSk/exec", {
+    fetch(SHEETS_ENDPOINT, {
       method: "POST",
       mode: "no-cors",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -314,6 +385,9 @@ print("Five or less")</textarea>
   }
   $("runBtn").addEventListener("click", () => executeCode(false));
   $("submitBtn").addEventListener("click", () => executeCode(true));
+  $("refreshLeaderboard").addEventListener("click", loadLeaderboard);
+  loadLeaderboard();
+
   $("resetBtn").addEventListener("click", () => {
     if (running) return;
     $("code").value = tasks[currentQuestion].code;
