@@ -100,6 +100,46 @@ print("Five or less")</textarea>
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
+
+  // Preserve participant details through submissions and accidental refreshes.
+  const participantFieldIds = [
+    "participantName",
+    "participantYear",
+    "participantDepartment",
+    "participantCollege"
+  ];
+  const participantStorageKey = "bug404ParticipantDetails";
+
+  function saveParticipantDetails() {
+    const details = {};
+    participantFieldIds.forEach((id) => {
+      const field = $(id);
+      if (field) details[id] = field.value;
+    });
+    try {
+      sessionStorage.setItem(participantStorageKey, JSON.stringify(details));
+    } catch (error) {}
+  }
+
+  function restoreParticipantDetails() {
+    try {
+      const saved = sessionStorage.getItem(participantStorageKey);
+      if (!saved) return;
+      const details = JSON.parse(saved);
+      participantFieldIds.forEach((id) => {
+        const field = $(id);
+        if (field && typeof details[id] === "string") {
+          field.value = details[id];
+        }
+      });
+    } catch (error) {}
+  }
+
+  restoreParticipantDetails();
+  participantFieldIds.forEach((id) => {
+    const field = $(id);
+    if (field) field.addEventListener("input", saveParticipantDetails);
+  });
   const tasks = {
     1: {
       round: 1,
