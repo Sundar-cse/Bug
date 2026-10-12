@@ -42,7 +42,7 @@
 
   <section class="participant-fields" aria-label="Participant details">
     <div><label for="participantName">PARTICIPANT NAME</label><input id="participantName" type="text" maxlength="100" autocomplete="name" placeholder="Enter participant name" required></div>
-    <div><label for="participantTeam">REGISTER NUMBER</label><input id="participantTeam" type="text" maxlength="100" autocomplete="off" placeholder="Enter register number" required></div>
+    <div><label for="participantYear">YEAR</label><input id="participantYear" type="text" maxlength="30" autocomplete="off" placeholder="e.g. II Year" required></div>
     <div><label for="participantDepartment">DEPARTMENT</label><input id="participantDepartment" type="text" maxlength="100" autocomplete="organization-title" placeholder="Enter department" required></div>
     <div><label for="participantCollege">COLLEGE</label><input id="participantCollege" type="text" maxlength="150" autocomplete="organization" placeholder="Enter college name" required></div>
   </section>
@@ -322,13 +322,13 @@ print("Five or less")</textarea>
 
   function sendSubmission(status, output, code) {
     const name = $("participantName").value.trim();
-    const team = $("participantTeam").value.trim();
+    const year = $("participantYear").value.trim();
     const department = $("participantDepartment").value.trim();
     const college = $("participantCollege").value.trim();
     const timeTaken = Object.keys(timeLeft).reduce((total, id) => total + (600 - timeLeft[id]), 0);
     const payload = {
       name,
-      team,
+      year,
       department,
       college,
       timeTaken,
@@ -350,7 +350,7 @@ print("Five or less")</textarea>
     if (isSubmission) {
       const requiredFields = [
         ["participantName", "participant name"],
-        ["participantTeam", "register number"],
+        ["participantYear", "year"],
         ["participantDepartment", "department"],
         ["participantCollege", "college name"]
       ];
@@ -397,7 +397,21 @@ print("Five or less")</textarea>
   });
   $("question1").addEventListener("click", () => { if (!running) showQuestion(1); });
   $("question2").addEventListener("click", () => { if (!running) showQuestion(2); });
-  $("question3").addEventListener("click", () => { if (!running) showQuestion(3); });
+  // Round 2 uses question 3; keep it accessible without requiring a missing tab element.
+  $("round1Tab").addEventListener("click", () => {
+    if (running) return;
+    $("round1Tab").setAttribute("aria-pressed", "true");
+    $("round2Tab").setAttribute("aria-pressed", "false");
+    $("round1Questions").style.display = "flex";
+    showQuestion(currentQuestion === 2 ? 2 : 1);
+  });
+  $("round2Tab").addEventListener("click", () => {
+    if (running) return;
+    $("round1Tab").setAttribute("aria-pressed", "false");
+    $("round2Tab").setAttribute("aria-pressed", "true");
+    $("round1Questions").style.display = "none";
+    showQuestion(3);
+  });
   // Plain textarea intentionally has no indentation, autocomplete, or bracket-pair helpers.
   updateTimer();
   startTimer();
