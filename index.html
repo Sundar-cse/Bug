@@ -150,7 +150,7 @@ print("Five or less")</textarea>
   function showQuestion(questionId, resetTime = true) {
     currentQuestion = questionId;
     const task = tasks[questionId];
-    [1, 2, 3].forEach((id) => {
+    [1, 2].forEach((id) => {
       $("question" + id).setAttribute("aria-pressed", String(id === questionId));
     });
     $("questionTitle").textContent = task.title;
