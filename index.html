@@ -64,7 +64,7 @@
     <p class="welcome-eyebrow">THE CODE IS BROKEN. ARE YOU READY?</p>
     <h1 class="welcome-title">BUG<span>-404</span></h1>
     <p class="welcome-tagline">FIND IT. FIX IT. OWN THE CODE.</p>
-    <p class="welcome-copy">Think fast. Debug smart. Beat the clock.<br>Step into the Python debugging arena.</p>
+    <p class="welcome-copy">Think fast. Debug smart. Beat the clock.<br>Step into the Python + Java debugging arena.</p>
     <button id="enterArenaBtn" class="enter-arena" type="button">ENTER THE ARENA <span aria-hidden="true">→</span></button>
     <div class="welcome-meta"><span>01 / REGISTER</span><i></i><span>02 / DEBUG</span><i></i><span>03 / CLIMB THE LEADERBOARD</span></div>
   </div>
@@ -72,11 +72,11 @@
 </section>
 <header>
   <div class="brand"><span class="logo">&lt;/&gt;</span><span>BUG-404</span></div>
-  <span class="tag">DEBUGGING ARENA · PYTHON</span>
+  <span class="tag">DEBUGGING ARENA · PYTHON + JAVA</span>
 </header>
 <main>
   <section class="intro">
-    <div><div class="eyebrow">Find it. Fix it.</div><h1>Find it. Fix it.</h1><p class="sub">Read the task, repair the buggy program, and run your code. Each challenge has its own 10-minute timer.</p></div>
+    <div><div class="eyebrow">Find it. Fix it.</div><h1>Find it. Fix it.</h1><p class="sub">Read the task, repair the buggy program, and run your code. Complete all six challenges: three in Python and three in Java. Each has a 10-minute timer; maximum score is 60.</p></div>
     <div class="timer" aria-live="polite"><span>Time remaining</span><strong id="timer">10:00</strong></div>
   </section>
 
@@ -93,8 +93,8 @@
   <div class="register-actions"><button class="btn primary" id="registerStartBtn" type="button">Register &amp; Start Challenge</button></div>
 
   <div class="rounds" role="group" aria-label="Choose round">
-    <button class="round" id="round1Tab" aria-pressed="true"><span class="num">01</span><span><strong>Round 1</strong><small>Two questions · 10 minutes each</small></span></button>
-    <button class="round" id="round2Tab" aria-pressed="false"><span class="num">02</span><span><strong>Round 2</strong><small>Hard challenge · 10 minutes</small></span></button>
+    <button class="round" id="round1Tab" aria-pressed="true"><span class="num">01</span><span><strong>Round 1</strong><small>Four challenges · 10 minutes each</small></span></button>
+    <button class="round" id="round2Tab" aria-pressed="false"><span class="num">02</span><span><strong>Round 2</strong><small>Two challenges · 10 minutes each</small></span></button>
   </div>
 
 
@@ -103,7 +103,7 @@
     <aside class="card">
       <div class="cardhead"><h2>YOUR CHALLENGE</h2><span class="pill" id="difficulty">HARD</span></div>
       <div class="question">
-        <div class="question-switcher" id="round1Questions" role="group" aria-label="Round 1 questions"><button type="button" id="question1" aria-pressed="true">Question 1 · Hard</button><button type="button" id="question2" aria-pressed="false">Question 2 · Very Hard</button></div>
+        <div class="question-switcher" id="round1Questions" role="group" aria-label="Choose a challenge" style="flex-wrap:wrap"><button type="button" id="question1" aria-pressed="true">Python 1</button><button type="button" id="question2" aria-pressed="false">Python 2</button><button type="button" id="question3" aria-pressed="false">Python 3</button><button type="button" id="question4" aria-pressed="false">Java 1</button><button type="button" id="question5" aria-pressed="false">Java 2</button><button type="button" id="question6" aria-pressed="false">Java 3</button></div>
         <h3 id="questionTitle">Debug the number classifier</h3>
         <p id="questionText">Fix the function so it returns "Greater" for numbers above 5 and "Five or less" for all other numbers. It must work for every test value, not just 7.</p>
         <div class="info"><strong>Task:</strong> <span id="taskHint">Repair the syntax and indentation first. The checker tests values above, equal to, and below 5.</span></div>
@@ -118,7 +118,7 @@
     </aside>
 
     <section class="card">
-      <div class="editorhead"><div class="editorlabel"><span class="dots"><i></i><i></i><i></i></span><span class="file">main.py</span></div><span class="pill">PLAIN EDITOR</span></div>
+      <div class="editorhead"><div class="editorlabel"><span class="dots"><i></i><i></i><i></i></span><span class="file" id="fileName">main.py</span></div><span class="pill">PLAIN EDITOR</span></div>
       <label for="code" style="position:absolute;left:-10000px">Python code editor</label>
       <textarea id="code" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" data-gramm="false" data-gramm_editor="false" aria-label="Python code editor" wrap="off">def classify_number(number)
     if number > 5
@@ -131,9 +131,9 @@
   </section>
 
   <section class="card final-result-card">
-    <div class="cardhead"><h2>FINAL RESULT</h2><span class="pill">3 QUESTIONS · 30 POINTS</span></div>
+    <div class="cardhead"><h2>FINAL RESULT</h2><span class="pill">6 CHALLENGES · 60 POINTS</span></div>
     <div class="final-result-body">
-      <p id="finalSubmitHint">Submit an answer for each of the three questions to unlock your final result.</p>
+      <p id="finalSubmitHint">Submit an answer for each of the six challenges to unlock your final result.</p>
       <button class="btn submit" id="finalSubmitBtn" type="button" disabled>Submit final result</button>
       <div id="finalResult" class="final-result" hidden>
         <div><span>Your score</span><strong id="finalScore">0 / 30</strong></div>
@@ -155,7 +155,7 @@
       </table>
     </div>
   </section>
-  <p class="bottomnote">BUG-404 Python debugging challenge. An internet connection is required to load the Python runtime and submit results. Use your correct participant details; organisers should test the Google Sheet scoring before the live event.</p>
+  <p class="bottomnote">BUG-404 Python + Java debugging challenge. An internet connection is required for both code runners and result submission. Use your correct participant details; organisers should test the Google Sheet scoring before the live event.</p>
 </main>
 <script>
 (() => {
@@ -226,44 +226,18 @@
   $("participantCount").addEventListener("change", updateMemberFields);
   updateMemberFields();
   const tasks = {
-    1: {
-      round: 1,
-      title: "Longest Increasing Streak",
-      text: "Repair the function so it returns the length of the longest CONTIGUOUS strictly increasing streak. Equal values break a streak, and the streak may begin anywhere in the list. Do not sort the input.",
-      hint: "Check the initial streak length, what happens when the sequence drops or repeats, and whether a one-element list should return 1.",
-      difficulty: "HARD",
-      code: 'def longest_streak(values):\n    if not values:\n        return 0\n    best = 0\n    current = 0\n    for i in range(1, len(values)):\n        if values[i] > values[i - 1]:\n            current += 1\n        else:\n            current = 1\n        best = max(best, current)\n    return best'
-    },
-    2: {
-      round: 1,
-      title: "Merge Overlapping Intervals",
-      text: "Given unsorted [start, end] intervals, return them sorted and merge every overlapping OR touching interval. The input may contain nested intervals and repeated boundaries. Do not mutate the original list.",
-      hint: "Sort by start first. Compare each interval with the end of the last merged interval, not just the previous input interval. Touching boundaries also merge.",
-      difficulty: "VERY HARD",
-      code: 'def merge_intervals(intervals):\n    if not intervals:\n        return []\n    intervals.sort()\n    merged = [intervals[0]]\n    for start, end in intervals[1:]:\n        last_start, last_end = merged[-1]\n        if start < last_end:\n            merged[-1][1] = min(last_end, end)\n        else:\n            merged.append([start, end])\n    return merged'
-    },
-    3: {
-      round: 2,
-      title: "Longest Subarray With Target Sum",
-      text: "Return the length of the longest contiguous subarray whose sum equals target. Values can be positive, zero, or negative. Aim for O(n) time; a sliding-window-only solution will fail.",
-      hint: "Use prefix sums and remember the EARLIEST index for each prefix sum. Replacing an earlier index with a later one can lose the longest valid answer.",
-      difficulty: "EXPERT",
-      code: 'def longest_target_subarray(values, target):\n    first_seen = {0: 0}\n    prefix = 0\n    best = 0\n    for i, value in enumerate(values, start=1):\n        prefix += value\n        needed = prefix - target\n        if needed in first_seen:\n            best = max(best, i - first_seen[needed])\n        first_seen[prefix] = i\n    return best'
-    }
+    1:{language:"python",round:1,title:"Longest Increasing Streak",text:"Return the length of the longest contiguous strictly increasing streak. Equal values break a streak. Do not sort.",hint:"Check the starting length, repeated values, drops, and one-element lists.",difficulty:"HARD",code:'def longest_streak(values):\n    if not values:\n        return 0\n    best = 0\n    current = 0\n    for i in range(1, len(values)):\n        if values[i] > values[i - 1]:\n            current += 1\n        else:\n            current = 1\n        best = max(best, current)\n    return best',tests:'\nprint(longest_streak([1,2,2,3,4,1,5,6,7]))\nprint(longest_streak([9,8,7]))\nprint(longest_streak([2,3,4,1,2,3]))\nprint(longest_streak([42]))',expected:"4\n1\n3\n1"},
+    2:{language:"python",round:1,title:"Merge Overlapping Intervals",text:"Sort unsorted [start,end] intervals and merge every overlapping or touching interval. Handle nested intervals.",hint:"Sort first, compare against the last merged end, and keep the larger endpoint.",difficulty:"VERY HARD",code:'def merge_intervals(intervals):\n    if not intervals:\n        return []\n    intervals.sort()\n    merged = [intervals[0]]\n    for start, end in intervals[1:]:\n        last_start, last_end = merged[-1]\n        if start < last_end:\n            merged[-1][1] = min(last_end, end)\n        else:\n            merged.append([start, end])\n    return merged',tests:'\nprint(merge_intervals([[8,10],[1,3],[2,6],[15,18],[6,8]]))\nprint(merge_intervals([[1,4],[4,5]]))\nprint(merge_intervals([[5,7],[2,3],[3,4]]))',expected:"[[1, 10], [15, 18]]\n[[1, 5]]\n[[2, 4], [5, 7]]"},
+    3:{language:"python",round:2,title:"Longest Subarray With Target Sum",text:"Return the length of the longest contiguous subarray summing to target. Values may be positive, zero, or negative. Aim for O(n).",hint:"Use prefix sums and retain the earliest index for each sum.",difficulty:"EXPERT",code:'def longest_target_subarray(values, target):\n    first_seen = {0: 0}\n    prefix = 0\n    best = 0\n    for i, value in enumerate(values, start=1):\n        prefix += value\n        needed = prefix - target\n        if needed in first_seen:\n            best = max(best, i - first_seen[needed])\n        first_seen[prefix] = i\n    return best',tests:'\nprint(longest_target_subarray([10,5,2,7,1,9],15))\nprint(longest_target_subarray([1,-1,5,-2,3],3))\nprint(longest_target_subarray([-2,-1,2,1],0))',expected:"4\n4\n4"},
+    4:{language:"java",round:1,title:"Longest Increasing Streak · Java",text:"Fix this Java method to return the longest contiguous strictly increasing streak.",hint:"Track best/current lengths; handle empty and one-element arrays.",difficulty:"HARD",code:'static int longestStreak(int[] values) {\n    if (values.length == 0) return 0;\n    int best = 0, current = 0;\n    for (int i = 1; i < values.length; i++) {\n        if (values[i] > values[i - 1]) current++;\n        else current = 1;\n        best = Math.max(best, current);\n    }\n    return best;\n}',tests:'System.out.println(longestStreak(new int[]{1,2,2,3,4,1,5,6,7}));\nSystem.out.println(longestStreak(new int[]{9,8,7}));\nSystem.out.println(longestStreak(new int[]{2,3,4,1,2,3}));\nSystem.out.println(longestStreak(new int[]{42}));',expected:"4\n1\n3\n1"},
+    5:{language:"java",round:1,title:"Merge Overlapping Intervals · Java",text:"Fix this Java method to sort intervals and merge overlapping or touching intervals, including nested intervals.",hint:"Sort by start; compare with the last merged interval and retain the maximum end.",difficulty:"VERY HARD",code:'static int[][] mergeIntervals(int[][] intervals) {\n    if (intervals.length == 0) return new int[0][2];\n    Arrays.sort(intervals, (a,b) -> Integer.compare(a[0], b[0]));\n    List<int[]> merged = new ArrayList<>();\n    merged.add(intervals[0]);\n    for (int i = 1; i < intervals.length; i++) {\n        int[] last = merged.get(merged.size()-1);\n        int[] next = intervals[i];\n        if (next[0] <= last[1]) last[1] = Math.max(last[1], next[1]);\n        else merged.add(next);\n    }\n    return merged.toArray(new int[merged.size()][]);\n}',tests:'System.out.println(Arrays.deepToString(mergeIntervals(new int[][]{{8,10},{1,3},{2,6},{15,18},{6,8}})));\nSystem.out.println(Arrays.deepToString(mergeIntervals(new int[][]{{1,4},{4,5}})));\nSystem.out.println(Arrays.deepToString(mergeIntervals(new int[][]{{5,7},{2,3},{3,4}})));',expected:"[[1, 10], [15, 18]]\n[[1, 5]]\n[[2, 4], [5, 7]]"},
+    6:{language:"java",round:2,title:"Longest Subarray With Target Sum · Java",text:"Fix this Java method to return the longest contiguous subarray length whose sum equals target, including negative values. Aim for O(n).",hint:"Use prefix sums and a map storing the earliest index for each prefix sum.",difficulty:"EXPERT",code:'static int longestTargetSubarray(int[] values, int target) {\n    Map<Integer,Integer> firstSeen = new HashMap<>();\n    firstSeen.put(0,0);\n    int prefix=0, best=0;\n    for (int i=0;i<values.length;i++) {\n        prefix += values[i];\n        int needed = prefix-target;\n        if (firstSeen.containsKey(needed)) best=Math.max(best,i+1-firstSeen.get(needed));\n        firstSeen.put(prefix,i+1);\n    }\n    return best;\n}',tests:'System.out.println(longestTargetSubarray(new int[]{10,5,2,7,1,9},15));\nSystem.out.println(longestTargetSubarray(new int[]{1,-1,5,-2,3},3));\nSystem.out.println(longestTargetSubarray(new int[]{-2,-1,2,1},0));',expected:"4\n4\n4"}
   };
-  const validationTests = {
-    1: '\nprint(longest_streak([1, 2, 2, 3, 4, 1, 5, 6, 7]))\nprint(longest_streak([9, 8, 7]))\nprint(longest_streak([2, 3, 4, 1, 2, 3]))\nprint(longest_streak([42]))',
-    2: '\nprint(merge_intervals([[8, 10], [1, 3], [2, 6], [15, 18], [6, 8]]))\nprint(merge_intervals([[1, 4], [4, 5]]))\nprint(merge_intervals([[5, 7], [2, 3], [3, 4]]))',
-    3: '\nprint(longest_target_subarray([10, 5, 2, 7, 1, 9], 15))\nprint(longest_target_subarray([1, -1, 5, -2, 3], 3))\nprint(longest_target_subarray([-2, -1, 2, 1], 0))'
-  };
-  const expectedOutputs = {
-    1: "4\n1\n3\n1",
-    2: "[[1, 10], [15, 18]]\n[[1, 5]]\n[[2, 4], [5, 7]]",
-    3: "4\n4\n4"
-  };
+  const validationTests = Object.fromEntries(Object.entries(tasks).map(([id,t])=>[id,t.tests]));
+  const expectedOutputs = Object.fromEntries(Object.entries(tasks).map(([id,t])=>[id,t.expected]));
   let currentQuestion = 1;
-  const timeLeft = {1:600, 2:600, 3:600};
-  const solved = {1:false, 2:false, 3:false};
+  const timeLeft = {1:600, 2:600, 3:600, 4:600, 5:600, 6:600};
+  const solved = {1:false, 2:false, 3:false, 4:false, 5:false, 6:false};
   let seconds = 600;
   let submitting = false;
   let countdown = null;
@@ -274,7 +248,7 @@
   let runHadError = false;
   let runTimer = null;
   let submittedCode = "";
-  const attemptedQuestions = {1:false, 2:false, 3:false};
+  const attemptedQuestions = {1:false, 2:false, 3:false, 4:false, 5:false, 6:false};
   let finalResultSubmitted = false;
   let registered = false;
 
@@ -286,24 +260,21 @@
     $("output").textContent = text;
   }
   function showQuestion(questionId, resetTime = true) {
-    currentQuestion = questionId;
-    const task = tasks[questionId];
-    [1, 2].forEach((id) => {
-      $("question" + id).setAttribute("aria-pressed", String(id === questionId));
-    });
-    $("questionTitle").textContent = task.title;
-    $("questionText").textContent = task.text;
-    $("taskHint").textContent = task.hint;
-    $("difficulty").textContent = task.difficulty;
-    $("code").value = task.code;
-    $("runBtn").disabled = !ready;
-    seconds = timeLeft[questionId];
-    updateTimer();
-    startTimer();
-    $("submitBtn").disabled = !ready || seconds <= 0 || solved[questionId];
-    $("submitBtn").textContent = solved[questionId] ? "✓ Correct" : "✓ Submit answer";
-    printOutput("Choose Run code to execute your current program.");
-    setStatus(ready ? "READY" : "RUNTIME LOADING…", ready ? "ready" : "running");
+    currentQuestion=questionId;
+    const task=tasks[questionId];
+    for(let id=1;id<=6;id++) $("question"+id).setAttribute("aria-pressed",String(id===questionId));
+    $("questionTitle").textContent=task.title;
+    $("questionText").textContent=task.text;
+    $("taskHint").textContent=task.hint;
+    $("difficulty").textContent=task.difficulty;
+    $("code").value=task.code;
+    $("fileName").textContent=task.language==="java"?"Main.java · method":"main.py";
+    seconds=timeLeft[questionId]; updateTimer(); startTimer();
+    $("runBtn").disabled=!registered || (task.language==="python" && !ready);
+    $("submitBtn").disabled=!registered || (task.language==="python" && !ready) || seconds<=0 || solved[questionId];
+    $("submitBtn").textContent=solved[questionId]?"✓ Correct":"✓ Submit answer";
+    printOutput(task.language==="java"?"Java challenge selected. Uses the managed Judge0 compiler.":"Python challenge selected.");
+    setStatus(task.language==="python"&&!ready?"PYTHON LOADING…":"READY",task.language==="python"&&!ready?"running":"ready");
   }
   function updateTimer() {
     timeLeft[currentQuestion] = seconds;
@@ -400,18 +371,18 @@
       setStatus(hasError ? "ERROR" : "FINISHED", hasError ? "error" : "ready");
     }
     timeLeft[currentQuestion] = seconds;
-    $("runBtn").disabled = !registered || !ready || seconds <= 0;
-    if (!solved[currentQuestion]) $("submitBtn").disabled = !registered || !ready || seconds <= 0;
+    $("runBtn").disabled = !registered || (tasks[currentQuestion].language==="python"&&!ready) || seconds<=0;
+    if (!solved[currentQuestion]) $("submitBtn").disabled = !registered || (tasks[currentQuestion].language==="python"&&!ready) || seconds<=0;
   }
   const SHEETS_ENDPOINT = "https://script.google.com/macros/s/AKfycbzOxCk9jyadUaRpwghFJVx4D3mSMAY_NsJUJ64ITe91QZ1Ry9YFSCvtVX95uI-oKSk/exec";
   let leaderboardCallbackId = 0;
 
   function updateFinalSubmitButton() {
-    const allAttempted = [1, 2, 3].every((id) => attemptedQuestions[id]);
+    const allAttempted = [1, 2, 3, 4, 5, 6].every((id) => attemptedQuestions[id]);
     $("finalSubmitBtn").disabled = !allAttempted || finalResultSubmitted;
     $("finalSubmitBtn").textContent = finalResultSubmitted ? "✓ Result submitted" : "Submit final result";
     $("finalSubmitHint").textContent = allAttempted
-      ? "All three questions have been submitted. You can now submit your final score."
+      ? "All six Python and Java challenges have been submitted. You can now submit your final score."
       : "Submit an answer for each of the three questions to unlock your final result.";
   }
 
@@ -421,7 +392,7 @@
     const memberNames = [1, 2, 3].slice(0, participantCount)
       .map((n) => $("member" + n + "Name").value.trim());
     const name = participantCount === 1 ? memberNames[0] : teamName;
-    const marks = [1, 2, 3].map((id) => solved[id] ? 10 : 0);
+    const marks = [1, 2, 3, 4, 5, 6].map((id) => solved[id] ? 10 : 0);
     const payload = {
       finalResult: true,
       name, teamName, participantCount, memberNames,
@@ -429,9 +400,9 @@
       department: $("participantDepartment").value.trim(),
       college: $("participantCollege").value.trim(),
       timeTaken: Object.keys(timeLeft).reduce((total, id) => total + (600 - timeLeft[id]), 0),
-      score, total: 30,
-      q1: marks[0], q2: marks[1], q3: marks[2],
-      percentage: Number((score / 30 * 100).toFixed(2))
+      score, total: 60,
+      q1: marks[0], q2: marks[1], q3: marks[2], q4: marks[3], q5: marks[4], q6: marks[5],
+      percentage: Number((score / 60 * 100).toFixed(2))
     };
     return fetch(SHEETS_ENDPOINT, {
       method: "POST",
@@ -442,14 +413,14 @@
   }
 
   async function submitFinalResult() {
-    if (finalResultSubmitted || ![1, 2, 3].every((id) => attemptedQuestions[id])) return;
-    const score = [1, 2, 3].filter((id) => solved[id]).length * 10;
-    const percentage = Number((score / 30 * 100).toFixed(2));
+    if (finalResultSubmitted || ![1, 2, 3, 4, 5, 6].every((id) => attemptedQuestions[id])) return;
+    const score = [1, 2, 3, 4, 5, 6].filter((id) => solved[id]).length * 10;
+    const percentage = Number((score / 60 * 100).toFixed(2));
     $("finalResult").hidden = false;
-    $("finalScore").textContent = score + " / 30";
+    $("finalScore").textContent = score + " / 60";
     $("finalPercentage").textContent = percentage + "%";
-    $("finalMessage").textContent = score === 30
-      ? "Excellent work — all three challenges solved!"
+    $("finalMessage").textContent = score === 60
+      ? "Excellent work — all six challenges solved!"
       : "Your final result has been submitted. Thank you for participating!";
     await sendFinalResultToSheet(score);
     finalResultSubmitted = true;
@@ -495,7 +466,7 @@
         sorted.forEach((person, index) => {
           const tr = document.createElement("tr");
           [String(index + 1), person.name || "Participant", person.college || "—",
-            (Number(person.score) || 0) + " / 30",
+            (Number(person.score) || 0) + " / 60",
             (Number(person.percentage) || 0).toFixed(2) + "%"].forEach((value, cellIndex) => {
               const td = document.createElement("td");
               td.textContent = value;
@@ -553,47 +524,44 @@
     });
   }
 
+  async function executeJava(isSubmission, code) {
+    const task=tasks[currentQuestion];
+    const source='import java.util.*;\npublic class Main {\n'+code+'\npublic static void main(String[] args) {\n'+task.tests+'\n}\n}';
+    try {
+      setStatus(isSubmission?"CHECKING JAVA…":"COMPILING JAVA…","running");
+      printOutput("Sending Java code to the managed compiler…");
+      const response=await fetch("https://ce.judge0.com/submissions?wait=true",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({source_code:source,language_id:62,cpu_time_limit:3,wall_time_limit:5})});
+      if(!response.ok) throw Error("Compiler returned HTTP "+response.status);
+      const result=await response.json();
+      if(result.compile_output) throw Error(result.compile_output);
+      if(result.stderr || (result.status && result.status.id>=4)) throw Error(result.stderr||result.message||result.status.description||"Execution failed");
+      const output=(result.stdout||"").trim();
+      if(isSubmission) {
+        attemptedQuestions[currentQuestion]=true;
+        if(output===expectedOutputs[currentQuestion]) {solved[currentQuestion]=true;printOutput("Correct answer! Java challenge cleared.");setStatus("CORRECT","ready");$("submitBtn").textContent="✓ Correct";sendSubmission(currentQuestion,"correct",output,code);}
+        else {printOutput("Incorrect answer — retry. Output received:\n"+(output||"(no output)"));setStatus("INCORRECT","error");sendSubmission(currentQuestion,"incorrect",output,code);}
+        updateFinalSubmitButton();
+      } else {printOutput(output||"Program finished without printing anything.");setStatus("FINISHED","ready");}
+    } catch(error) {printOutput("Java compiler unavailable or code failed:\n"+(error.message||String(error))+"\nRetry after checking your connection.");setStatus("JAVA ERROR","error");}
+    finally {running=false;submitting=false;$("runBtn").disabled=!registered||seconds<=0;$("submitBtn").disabled=!registered||seconds<=0||solved[currentQuestion];}
+  }
   function executeCode(isSubmission) {
-    if (isSubmission) {
-      const participantCount = Number($("participantCount").value || 1);
-      const requiredFields = [
-        ...(participantCount >= 2 ? [["teamName", "team name"]] : []),
-        ["participantYear", "year of study"],
-        ["participantDepartment", "department"],
-        ["participantCollege", "college name"],
-        ...[1, 2, 3].slice(0, Number($("participantCount").value || 1))
-          .map((n) => ["member" + n + "Name", "participant " + n + " name"])
-      ];
-      const missing = requiredFields.find(([id]) => !$(id).value.trim());
-      if (missing) {
-        printOutput("Enter your " + missing[1] + " before submitting.");
-        setStatus("DETAILS REQUIRED", "error");
-        $(missing[0]).focus();
-        return;
-      }
+    if(isSubmission) {
+      const count=Number($("participantCount").value||1);
+      const required=[...(count>=2?[["teamName","team name"]]:[]),["participantYear","year of study"],["participantDepartment","department"],["participantCollege","college name"],...[1,2,3].slice(0,count).map(n=>["member"+n+"Name","participant "+n+" name"])];
+      const missing=required.find(([id])=>!$(id).value.trim());
+      if(missing){printOutput("Enter your "+missing[1]+" before submitting.");setStatus("DETAILS REQUIRED","error");$(missing[0]).focus();return;}
     }
-    if (!registered || !ready || running || seconds <= 0 || (isSubmission && solved[currentQuestion])) return;
-    submitting = isSubmission;
-    submittedCode = $("code").value;
-    running = true;
-    runOutput = [];
-    runHadError = false;
-    $("runBtn").disabled = true;
-    $("submitBtn").disabled = true;
-    setStatus(isSubmission ? "CHECKING…" : "RUNNING…", "running");
-    printOutput(isSubmission ? "Checking your submission…" : "Running Python code…");
-    runTimer = setTimeout(() => {
-      if (!running) return;
-      running = false;
-      if (worker) worker.terminate();
-      ready = false;
-      submitting = false;
-      setStatus("STOPPED · TIME LIMIT", "error");
-      printOutput("Execution took too long and was stopped. The Python runtime is restarting.");
-      spawnWorker();
-    }, 4000);
-    const codeToRun = $("code").value + (isSubmission ? validationTests[currentQuestion] : "");
-    worker.postMessage({type:"run", code:codeToRun});
+    if(!registered||running||seconds<=0||(isSubmission&&solved[currentQuestion])) return;
+    const task=tasks[currentQuestion];
+    if(task.language==="python"&&!ready){printOutput("Python runtime is still loading.");return;}
+    submitting=isSubmission; submittedCode=$("code").value; running=true; runOutput=[]; runHadError=false;
+    $("runBtn").disabled=true;$("submitBtn").disabled=true;
+    if(task.language==="java"){executeJava(isSubmission,submittedCode);return;}
+    setStatus(isSubmission?"CHECKING…":"RUNNING…","running");
+    printOutput(isSubmission?"Checking your Python submission…":"Running Python code…");
+    runTimer=setTimeout(()=>{if(!running)return;running=false;if(worker)worker.terminate();ready=false;submitting=false;setStatus("STOPPED · TIME LIMIT","error");printOutput("Python execution timed out. Restarting runner.");spawnWorker();},4000);
+    worker.postMessage({type:"run",code:$("code").value+(isSubmission?validationTests[currentQuestion]:"")});
   }
   $("runBtn").addEventListener("click", () => executeCode(false));
   $("submitBtn").addEventListener("click", () => executeCode(true));
@@ -608,22 +576,21 @@
     printOutput("Starter code restored. Your edits were cleared.");
     setStatus(ready ? "READY" : "RUNTIME LOADING…", ready ? "ready" : "running");
   });
-  $("question1").addEventListener("click", () => { if (!running) showQuestion(1); });
-  $("question2").addEventListener("click", () => { if (!running) showQuestion(2); });
+  for (let id=1;id<=6;id++) $("question"+id).addEventListener("click",()=>{if(!running)showQuestion(id);});
   // Round 2 uses question 3; keep it accessible without requiring a missing tab element.
   $("round1Tab").addEventListener("click", () => {
     if (running) return;
     $("round1Tab").setAttribute("aria-pressed", "true");
     $("round2Tab").setAttribute("aria-pressed", "false");
     $("round1Questions").style.display = "flex";
-    showQuestion(currentQuestion === 2 ? 2 : 1);
+    showQuestion(currentQuestion===2||currentQuestion===4||currentQuestion===5?currentQuestion:1);
   });
   $("round2Tab").addEventListener("click", () => {
     if (running) return;
     $("round1Tab").setAttribute("aria-pressed", "false");
     $("round2Tab").setAttribute("aria-pressed", "true");
-    $("round1Questions").style.display = "none";
-    showQuestion(3);
+    $("round1Questions").style.display = "flex";
+    showQuestion(currentQuestion===6?6:3);
   });
   // Welcome screen: enter the arena to reveal registration and the challenge.
   $("enterArenaBtn").addEventListener("click", () => {
@@ -654,7 +621,7 @@
     $("registerStartBtn").disabled = true;
     $("registerStartBtn").textContent = "✓ Registered — Challenge Started";
     startTimer();
-    printOutput("Registration complete. Your 10-minute timer has started.");
+    printOutput("Registration complete. Your first 10-minute challenge timer has started. Complete all six challenges to submit your result.");
     setStatus(ready ? "READY" : "RUNTIME LOADING…", ready ? "ready" : "running");
     $("runBtn").disabled = !ready;
     $("submitBtn").disabled = !ready;
