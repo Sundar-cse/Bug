@@ -94,18 +94,7 @@
     <button class="round" id="round2Tab" aria-pressed="false"><span class="num">02</span><span><strong>Round 2</strong><small>Hard challenge · 10 minutes</small></span></button>
   </div>
 
-  <section class="leaderboard" aria-labelledby="leaderboardTitle">
-    <div class="leaderboard-head">
-      <h2 id="leaderboardTitle">LIVE LEADERBOARD</h2>
-      <div class="leaderboard-actions"><span class="leaderboard-status" id="leaderboardStatus">Loading scores…</span><button class="btn" id="refreshLeaderboard" type="button">↻ Refresh</button></div>
-    </div>
-    <div class="leaderboard-wrap">
-      <table>
-        <thead><tr><th>RANK</th><th>PARTICIPANT</th><th>COLLEGE</th><th>SCORE</th><th>PERCENTAGE</th></tr></thead>
-        <tbody id="leaderboardRows"><tr><td colspan="5" class="leaderboard-empty">Loading leaderboard…</td></tr></tbody>
-      </table>
-    </div>
-  </section>
+
 
   <section class="workspace">
     <aside class="card">
@@ -136,6 +125,19 @@ print("Five or less")</textarea>
       <div class="actions"><button class="btn primary" id="runBtn">▶ Run code</button><button class="btn submit" id="submitBtn">✓ Submit answer</button><button class="btn" id="resetBtn">Reset code</button><span class="hint">Plain editor · no coding assists</span></div>
       <div class="output"><div class="outputhead"><span>OUTPUT / ERROR</span><span class="status ready" id="status">RUNTIME LOADING…</span></div><pre id="output" aria-live="polite">Preparing Python runtime. This may take a few seconds on first load…</pre></div>
     </section>
+  </section>
+
+  <section class="leaderboard" aria-labelledby="leaderboardTitle">
+    <div class="leaderboard-head">
+      <h2 id="leaderboardTitle">LIVE LEADERBOARD</h2>
+      <div class="leaderboard-actions"><span class="leaderboard-status" id="leaderboardStatus">Loading scores…</span><button class="btn" id="refreshLeaderboard" type="button">↻ Refresh</button></div>
+    </div>
+    <div class="leaderboard-wrap">
+      <table>
+        <thead><tr><th>RANK</th><th>PARTICIPANT</th><th>COLLEGE</th><th>SCORE</th><th>PERCENTAGE</th></tr></thead>
+        <tbody id="leaderboardRows"><tr><td colspan="5" class="leaderboard-empty">Loading leaderboard…</td></tr></tbody>
+      </table>
+    </div>
   </section>
   <p class="bottomnote">BUG-404 Python debugging challenge. An internet connection is required to load the Python runtime and submit results. Use your correct participant details; organisers should test the Google Sheet scoring before the live event.</p>
 </main>
@@ -360,7 +362,8 @@ print("Five or less")</textarea>
       submitting = false;
       const expected = expectedOutputs[currentQuestion];
       const isCorrect = !hasError && text.trim() === expected;
-      sendSubmission(isCorrect ? "CORRECT" : "INCORRECT", text, submittedCode);
+      // Save only successful answers; incorrect attempts must not create/update leaderboard entries.
+      if (isCorrect) sendSubmission("CORRECT", text, submittedCode);
       if (isCorrect) {
         solved[currentQuestion] = true;
         printOutput("Correct answer! Challenge cleared.");
