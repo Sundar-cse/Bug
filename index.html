@@ -411,7 +411,7 @@
       : "Submit an answer for each of the three questions to unlock your final result.";
   }
 
-  function submitFinalResult() {
+  async function submitFinalResult() {
     if (finalResultSubmitted || ![1, 2, 3].every((id) => attemptedQuestions[id])) return;
     finalResultSubmitted = true;
     const score = [1, 2, 3].filter((id) => solved[id]).length * 10;
@@ -422,10 +422,10 @@
     $("finalMessage").textContent = score === 30
       ? "Excellent work — all three challenges solved!"
       : "Your final result has been submitted. Thank you for participating!";
-    [1, 2, 3].forEach((id) => {
-      sendSubmission(id, solved[id] ? "CORRECT" : "INCORRECT",
+    for (const id of [1, 2, 3]) {
+      await sendSubmission(id, solved[id] ? "CORRECT" : "INCORRECT",
         solved[id] ? expectedOutputs[id] : "Not solved", "");
-    });
+    }
     $("finalSubmitBtn").disabled = true;
     $("finalSubmitBtn").textContent = "✓ Result submitted";
     $("finalSubmitHint").textContent = "Your final score is shown above. The organizer can see it on the leaderboard after it refreshes.";
@@ -516,12 +516,14 @@
       output: output || "",
       status
     };
-    fetch(SHEETS_ENDPOINT, {
+    return fetch(SHEETS_ENDPOINT, {
       method: "POST",
       mode: "no-cors",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify(payload)
-    }).catch((error) => console.error("Could not send submission to Google Sheets:", error));
+    }).catch((error) => {
+      console.error("Could not send submission to Google Sheets:", error);
+    });
   }
 
   function executeCode(isSubmission) {
