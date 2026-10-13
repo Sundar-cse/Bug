@@ -624,6 +624,7 @@
       return;
     }
     registered = true;
+    $("code").readOnly = false;
     saveParticipantDetails();
     participantFieldIds.forEach(id => { if ($(id)) $(id).disabled = true; });
     $("registerStartBtn").disabled = true;
