@@ -411,21 +411,44 @@
       : "Submit an answer for each of the three questions to unlock your final result.";
   }
 
+  function sendFinalResultToSheet(score) {
+    const participantCount = Number($("participantCount").value || 1);
+    const teamName = participantCount >= 2 ? $("teamName").value.trim() : "";
+    const memberNames = [1, 2, 3].slice(0, participantCount)
+      .map((n) => $("member" + n + "Name").value.trim());
+    const name = participantCount === 1 ? memberNames[0] : teamName;
+    const marks = [1, 2, 3].map((id) => solved[id] ? 10 : 0);
+    const payload = {
+      finalResult: true,
+      name, teamName, participantCount, memberNames,
+      year: $("participantYear").value.trim(),
+      department: $("participantDepartment").value.trim(),
+      college: $("participantCollege").value.trim(),
+      timeTaken: Object.keys(timeLeft).reduce((total, id) => total + (600 - timeLeft[id]), 0),
+      score, total: 30,
+      q1: marks[0], q2: marks[1], q3: marks[2],
+      percentage: Number((score / 30 * 100).toFixed(2))
+    };
+    return fetch(SHEETS_ENDPOINT, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    }).catch((error) => console.error("Could not send final result to Google Sheets:", error));
+  }
+
   async function submitFinalResult() {
     if (finalResultSubmitted || ![1, 2, 3].every((id) => attemptedQuestions[id])) return;
-    finalResultSubmitted = true;
     const score = [1, 2, 3].filter((id) => solved[id]).length * 10;
-    const percentage = Math.round((score / 30) * 100);
+    const percentage = Number((score / 30 * 100).toFixed(2));
     $("finalResult").hidden = false;
     $("finalScore").textContent = score + " / 30";
     $("finalPercentage").textContent = percentage + "%";
     $("finalMessage").textContent = score === 30
       ? "Excellent work — all three challenges solved!"
       : "Your final result has been submitted. Thank you for participating!";
-    for (const id of [1, 2, 3]) {
-      await sendSubmission(id, solved[id] ? "CORRECT" : "INCORRECT",
-        solved[id] ? expectedOutputs[id] : "Not solved", "");
-    }
+    await sendFinalResultToSheet(score);
+    finalResultSubmitted = true;
     $("finalSubmitBtn").disabled = true;
     $("finalSubmitBtn").textContent = "✓ Result submitted";
     $("finalSubmitHint").textContent = "Your final score is shown above. The organizer can see it on the leaderboard after it refreshes.";
