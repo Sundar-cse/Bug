@@ -9,7 +9,7 @@
     :root{color-scheme:dark;--bg:#10170f;--panel:#182318;--panel2:#203122;--line:#3b5739;--text:#f0f4df;--muted:#b1c0a4;--green:#a8f05b;--green2:#6eaa3c;--cream:#f2edcf;--red:#ff9b86;--orange:#ffd477}
     *{box-sizing:border-box}
     body{margin:0;background-color:var(--bg);background-image:radial-gradient(#9bd65d12 1px,transparent 1px),linear-gradient(135deg,#172419,#0d130e 65%);background-size:8px 8px,auto;color:var(--text);font:15px/1.55 system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
-    header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px clamp(16px,4vw,52px);border-bottom:2px solid var(--line);background:#10170ff2}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px clamp(16px,4vw,52px);border-bottom:2px solid var(--line);background:#10170ff2}.header-actions{display:flex;align-items:center;gap:10px}.dev-login{border:1px solid var(--green2);border-radius:3px;padding:9px 12px;background:#203122;color:var(--green);font-size:11px;font-weight:900;letter-spacing:.6px;cursor:pointer}.dev-login.active{background:var(--green);color:#14200e}
     .brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:1px;font-size:19px}.logo{display:grid;place-items:center;width:40px;height:40px;border:2px solid var(--green);border-radius:4px;background:var(--green);color:#14200e;font-weight:1000;font-size:19px;box-shadow:4px 4px 0 #486b32}
     .tag{color:var(--green);font-size:11px;font-weight:800;letter-spacing:1.5px;border:1px solid var(--line);padding:6px 10px;border-radius:3px}
     main{max-width:1180px;margin:0 auto;padding:30px 18px 56px}
@@ -72,7 +72,7 @@
 </section>
 <header>
   <div class="brand"><span class="logo">&lt;/&gt;</span><span>BUG-404</span></div>
-  <span class="tag">DEBUGGING ARENA · PYTHON + JAVA</span>
+  <div class="header-actions"><span class="tag">DEBUGGING ARENA · PYTHON + JAVA</span><button class="dev-login" id="devLoginBtn" type="button">DEV LOGIN</button></div>
 </header>
 <main>
   <section class="intro">
@@ -249,6 +249,58 @@
   const attemptedQuestions = {1:false, 2:false, 3:false, 4:false};
   let finalResultSubmitted = false;
   let registered = false;
+  let devMode = false;
+  // Demo-only access code. Static GitHub Pages cannot keep this code secret.
+  const DEV_ACCESS_CODE = "BUG404-DEV-2026";
+  const solutions = {
+    1: `def move_zeros(nums):
+    non_zero = [n for n in nums if n != 0]
+    zeros = [n for n in nums if n == 0]
+    return non_zero + zeros`,
+    2: `def first_unique(text):
+    for ch in text:
+        if text.count(ch) == 1:
+            return ch
+    return -1`,
+    3: `static boolean isBalanced(String text) {
+    Deque<Character> stack = new ArrayDeque<>();
+    for (int i = 0; i < text.length(); i++) {
+        char ch = text.charAt(i);
+        if (ch == '(' || ch == '[' || ch == '{') {
+            stack.push(ch);
+        } else if (ch == ')' || ch == ']' || ch == '}') {
+            if (stack.isEmpty()) return false;
+            char top = stack.pop();
+            if ((ch == ')' && top != '(') || (ch == ']' && top != '[') || (ch == '}' && top != '{')) return false;
+        }
+    }
+    return stack.isEmpty();
+}`,
+    4: `static int maxSubarraySum(int[] nums) {
+    int current = nums[0];
+    int best = nums[0];
+    for (int i = 1; i < nums.length; i++) {
+        current = Math.max(nums[i], current + nums[i]);
+        best = Math.max(best, current);
+    }
+    return best;
+}`
+  };
+  function applyDevMode() {
+    $("devLoginBtn").classList.toggle("active", devMode);
+    $("devLoginBtn").textContent = devMode ? "DEV MODE: ON" : "DEV LOGIN";
+    $("code").value = devMode ? solutions[currentQuestion] : tasks[currentQuestion].code;
+    $("taskHint").textContent = devMode ? "DEV ANSWER: Corrected solution loaded in the editor. Organiser practice only." : tasks[currentQuestion].hint;
+    printOutput(devMode ? "Developer mode enabled. Corrected solution loaded." : "Developer mode disabled. Starter code restored.");
+    setStatus("READY", "ready");
+  }
+  $("devLoginBtn").addEventListener("click", () => {
+    if (devMode) { devMode = false; applyDevMode(); return; }
+    const entered = window.prompt("Enter organiser dev access code:");
+    if (entered === null) return;
+    if (entered === DEV_ACCESS_CODE) { devMode = true; applyDevMode(); }
+    else { window.alert("Incorrect dev access code."); }
+  });
 
   function setStatus(text, kind) {
     $("status").textContent = text;
@@ -263,9 +315,9 @@
     for(let id=1;id<=4;id++) $("question"+id).setAttribute("aria-pressed",String(id===questionId));
     $("questionTitle").textContent=task.title;
     $("questionText").textContent=task.text;
-    $("taskHint").textContent=task.hint;
+    $("taskHint").textContent=devMode ? "DEV ANSWER: Corrected solution loaded in the editor. Organiser practice only." : task.hint;
     $("difficulty").textContent=task.difficulty;
-    $("code").value=task.code;
+    $("code").value=devMode ? solutions[questionId] : task.code;
     $("fileName").textContent=task.language==="java"?"Main.java · method":"main.py";
     seconds=timeLeft[task.round]; updateTimer(); startTimer();
     $("runBtn").disabled=!registered || (task.language==="python" && !ready);
@@ -580,8 +632,8 @@
 
   $("resetBtn").addEventListener("click", () => {
     if (running) return;
-    $("code").value = tasks[currentQuestion].code;
-    printOutput("Starter code restored. Your edits were cleared.");
+    $("code").value = devMode ? solutions[currentQuestion] : tasks[currentQuestion].code;
+    printOutput(devMode ? "Corrected developer solution restored." : "Starter code restored. Your edits were cleared.");
     setStatus(ready ? "READY" : "RUNTIME LOADING…", ready ? "ready" : "running");
   });
   for (let id=1;id<=4;id++) $("question"+id).addEventListener("click",()=>{if(!running && tasks[id].round===Number($("round1Tab").getAttribute("aria-pressed")==="true"?1:2))showQuestion(id);});
