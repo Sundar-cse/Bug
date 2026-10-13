@@ -340,8 +340,8 @@
       if (msg.type === "ready") {
         ready = true;
         if (!running) setStatus("READY", "ready");
-        $("runBtn").disabled = seconds <= 0;
-        $("submitBtn").disabled = seconds <= 0 || solved[currentQuestion];
+        $("runBtn").disabled = !registered || seconds <= 0;
+        $("submitBtn").disabled = !registered || seconds <= 0 || solved[currentQuestion];
         printOutput("Python is ready. Run your code when you are ready.");
       } else if (msg.type === "stdout") {
         // Pyodide's batched stdout callback omits line terminators; preserve them for multi-case checks.
@@ -400,8 +400,8 @@
       setStatus(hasError ? "ERROR" : "FINISHED", hasError ? "error" : "ready");
     }
     timeLeft[currentQuestion] = seconds;
-    $("runBtn").disabled = !ready || seconds <= 0;
-    if (!solved[currentQuestion]) $("submitBtn").disabled = !ready || seconds <= 0;
+    $("runBtn").disabled = !registered || !ready || seconds <= 0;
+    if (!solved[currentQuestion]) $("submitBtn").disabled = !registered || !ready || seconds <= 0;
   }
   const SHEETS_ENDPOINT = "https://script.google.com/macros/s/AKfycbzOxCk9jyadUaRpwghFJVx4D3mSMAY_NsJUJ64ITe91QZ1Ry9YFSCvtVX95uI-oKSk/exec";
   let leaderboardCallbackId = 0;
