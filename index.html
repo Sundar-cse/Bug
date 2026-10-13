@@ -210,28 +210,38 @@ print("Five or less")</textarea>
   const tasks = {
     1: {
       round: 1,
-      title: "Fix the conditional",
-      text: "Repair the program so it prints “Greater” when the number is greater than 5, and “Five or less” otherwise.",
-      hint: "Find and fix the syntax and indentation errors. Keep the program's intended behaviour.",
-      difficulty: "EASY",
-      code: 'number = 7\nif number > 5\nprint("Greater")\nelse:\nprint("Five or less")'
+      title: "Debug the number classifier",
+      text: "Fix the function so it returns \\"Greater\\" for numbers above 5 and \\"Five or less\\" for all other numbers. It must work for every test value, not just 7.",
+      hint: "Repair the syntax and indentation first. The checker tests values above, equal to, and below 5.",
+      difficulty: "MEDIUM",
+      code: 'def classify_number(number)\n    if number > 5\n    return "Greater"\n    else:\n    return "Five or less"'
     },
     2: {
       round: 1,
-      title: "Repair the total",
-      text: "The program should calculate and print the sum of all integers from 1 through 5. It runs, but the result is incorrect.",
-      hint: "Find the logic error. The expected total is 15.",
-      difficulty: "MEDIUM",
-      code: 'total = 0\nfor number in range(1, 5):\n    total += number\nprint(total)'
+      title: "Fix the range-sum function",
+      text: "The function should return the sum of every integer from 1 through n, inclusive. It currently misses a boundary value.",
+      hint: "Python's range stop value is excluded. Check the loop boundary and test small values too.",
+      difficulty: "HARD",
+      code: 'def sum_to_n(n):\n    total = 0\n    for number in range(1, n):\n        total += number\n    return total'
     },
     3: {
       round: 2,
-      title: "Find the second-largest distinct number",
-      text: "The program should print the second-largest DISTINCT value in the list. The list may contain repeated values, and the current program fails on that case.",
-      hint: "Check how repeated maximum values affect the second-largest value.",
-      difficulty: "HARD",
-      code: 'numbers = [12, 7, 19, 19, 4, 15]\nlargest = numbers[0]\nsecond_largest = float("-inf")\n\nfor number in numbers:\n    if number > largest:\n        second_largest = largest\n        largest = number\n    elif number > second_largest:\n        second_largest = number\n\nprint(second_largest)'
+      title: "Second-largest distinct number",
+      text: "Fix the function to return the second-largest DISTINCT value. Duplicate maximum values must not count twice; the list can contain negative values.",
+      hint: "Make sure a value equal to the largest is not accepted as the second-largest. Consider what happens with repeated and negative values.",
+      difficulty: "EXPERT",
+      code: 'def second_largest_distinct(numbers):\n    largest = numbers[0]\n    second_largest = float("-inf")\n    for number in numbers:\n        if number > largest:\n            second_largest = largest\n            largest = number\n        elif number > second_largest:\n            second_largest = number\n    return second_largest'
     }
+  };
+  const validationTests = {
+    1: '\nprint(classify_number(7))\nprint(classify_number(5))\nprint(classify_number(-3))',
+    2: '\nprint(sum_to_n(5))\nprint(sum_to_n(1))\nprint(sum_to_n(10))',
+    3: '\nprint(second_largest_distinct([12, 7, 19, 19, 4, 15]))\nprint(second_largest_distinct([5, 5, 4, 4, 1]))\nprint(second_largest_distinct([-8, -2, -2, -5]))'
+  };
+  const expectedOutputs = {
+    1: "Greater\nFive or less\nFive or less",
+    2: "15\n1\n55",
+    3: "15\n4\n-5"
   };
   let currentQuestion = 1;
   const timeLeft = {1:600, 2:600, 3:600};
@@ -347,7 +357,7 @@ print("Five or less")</textarea>
     const text = runOutput.join("");
     if (submitting) {
       submitting = false;
-      const expected = {1:"Greater", 2:"15", 3:"15"}[currentQuestion];
+      const expected = expectedOutputs[currentQuestion];
       const isCorrect = !hasError && text.trim() === expected;
       sendSubmission(isCorrect ? "CORRECT" : "INCORRECT", text, submittedCode);
       if (isCorrect) {
@@ -501,7 +511,8 @@ print("Five or less")</textarea>
       printOutput("Execution took too long and was stopped. The Python runtime is restarting.");
       spawnWorker();
     }, 4000);
-    worker.postMessage({type:"run", code:$("code").value});
+    const codeToRun = $("code").value + (isSubmission ? validationTests[currentQuestion] : "");
+    worker.postMessage({type:"run", code:codeToRun});
   }
   $("runBtn").addEventListener("click", () => executeCode(false));
   $("submitBtn").addEventListener("click", () => executeCode(true));
