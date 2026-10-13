@@ -25,11 +25,49 @@
     textarea{display:block;width:100%;height:340px;resize:vertical;border:0;outline:0;background:#0b120b;color:#dff8c9;padding:19px;font:14px/1.75 ui-monospace,SFMono-Regular,Consolas,monospace;tab-size:4;white-space:pre;overflow:auto;border-bottom:1px solid var(--line);border-radius:0;caret-color:var(--green)}
     .participant-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0 8px;padding:14px;border:1px solid var(--line);background:#172117}.participant-fields label{display:block;color:var(--muted);font-size:11px;font-weight:800;letter-spacing:1px;margin-bottom:5px}.participant-fields input{width:100%;min-width:0;padding:10px 11px;border:1px solid var(--line);border-radius:3px;background:#0b120b;color:var(--text);font:14px system-ui,sans-serif}.participant-fields input:focus{outline:2px solid var(--green2);outline-offset:1px}.actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:13px 15px;background:#172117}.btn{border:1px solid #496342;border-radius:3px;padding:10px 15px;font-weight:800;font-size:12px;letter-spacing:.3px;cursor:pointer;color:var(--text);background:#263825}.btn.primary{background:var(--green);border-color:var(--green);color:#14200e}.btn.submit{background:#d9eac3;border-color:#d9eac3;color:#15210f}.btn:disabled{opacity:.55;cursor:wait}.hint{font-size:11px;color:var(--muted);margin-left:auto}
     .output{border-top:1px solid var(--line)}.outputhead{padding:11px 15px;display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:11px;letter-spacing:1px}.status{font-size:10px;font-weight:900;letter-spacing:.5px}.status.ready{color:var(--green)}.status.error{color:var(--red)}.status.running{color:var(--orange)}pre{margin:0;min-height:86px;max-height:190px;overflow:auto;padding:14px 16px 17px;background:#0b120b;color:#d8e5c8;font:13px/1.6 ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere}.leaderboard{margin:20px 0 24px;background:#172117;border:1px solid var(--line);box-shadow:4px 4px 0 #111a10;overflow:hidden}.leaderboard-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 17px;background:#202f1e;border-bottom:1px solid var(--line)}.leaderboard-head h2{font-size:12px;letter-spacing:1.4px;margin:0}.leaderboard-wrap{overflow-x:auto}.leaderboard table{width:100%;border-collapse:collapse;min-width:470px;text-align:left;font-size:13px}.leaderboard th,.leaderboard td{padding:11px 14px;border-bottom:1px solid #30452d}.leaderboard th{color:var(--muted);font-size:10px;letter-spacing:1px;background:#111a11}.leaderboard td{color:var(--text)}.leaderboard td.score{color:var(--green);font-weight:900}.leaderboard-empty{padding:16px;color:var(--muted);font-size:13px}.leaderboard-actions{display:flex;align-items:center;gap:10px}.leaderboard-actions .btn{padding:7px 10px}.leaderboard-status{font-size:11px;color:var(--muted)}.bottomnote{margin:19px 2px;color:var(--muted);font-size:12px}
+    /* BUG-404 cinematic welcome screen */
+    .welcome-screen{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at 50% 45%,#243b25 0%,#10170f 54%,#080d09 100%);color:#f0f4df;padding:24px}
+    .welcome-grid{position:absolute;inset:0;opacity:.2;background-image:linear-gradient(#a8f05b22 1px,transparent 1px),linear-gradient(90deg,#a8f05b22 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,transparent,#000 20%,#000 80%,transparent)}
+    .welcome-content{position:relative;width:min(760px,100%);text-align:center;animation:welcomeRise .7s ease-out both}
+    .welcome-chip{display:inline-flex;align-items:center;gap:9px;border:1px solid #48663b;background:#121d12d9;padding:9px 13px;color:#c8d9ba;font-size:10px;font-weight:900;letter-spacing:1.6px}
+    .welcome-pulse{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 14px var(--green);animation:pulseGlow 1.5s infinite}
+    .welcome-mark{display:grid;place-items:center;width:68px;height:68px;margin:30px auto 20px;border:2px solid var(--green);background:var(--green);color:#10170f;font:900 26px ui-monospace,monospace;box-shadow:7px 7px 0 #3b5a2e;transform:skew(-4deg)}
+    .welcome-eyebrow{margin:0;color:var(--green);font-size:11px;font-weight:900;letter-spacing:3px}
+    .welcome-title{margin:10px 0 0;font-size:clamp(66px,13vw,120px);font-weight:1000;line-height:.98;letter-spacing:-7px;text-shadow:5px 5px 0 #263e20}
+    .welcome-title span{color:var(--green);text-shadow:0 0 32px #a8f05b44}
+    .welcome-tagline{margin:19px 0 12px;color:#f0f4df;font-size:clamp(14px,2.5vw,20px);font-weight:900;letter-spacing:clamp(2px,.8vw,6px)}
+    .welcome-copy{color:var(--muted);font-size:15px;line-height:1.9}
+    .enter-arena{display:inline-flex;align-items:center;justify-content:center;gap:24px;margin:22px 0 26px;padding:16px 25px;border:2px solid var(--green);background:var(--green);color:#10170f;font-size:13px;font-weight:1000;letter-spacing:1.5px;cursor:pointer;box-shadow:6px 6px 0 #456834;transition:transform .18s,box-shadow .18s,background .18s}
+    .enter-arena:hover{transform:translate(2px,2px);box-shadow:3px 3px 0 #456834;background:#c3ff7e}
+    .enter-arena span{font-size:19px}
+    .welcome-meta{display:flex;align-items:center;justify-content:center;gap:13px;flex-wrap:wrap;color:#879781;font-size:9px;font-weight:900;letter-spacing:1.3px}
+    .welcome-meta i{width:4px;height:4px;background:var(--green2);transform:rotate(45deg)}
+    .welcome-corner{position:absolute;width:45px;height:45px;border-color:var(--green2);border-style:solid;opacity:.7}
+    .welcome-corner-tl{top:24px;left:24px;border-width:2px 0 0 2px}
+    .welcome-corner-br{bottom:24px;right:24px;border-width:0 2px 2px 0}
+    @keyframes welcomeRise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes pulseGlow{50%{opacity:.4;box-shadow:0 0 4px var(--green)}}
+    @media(prefers-reduced-motion:reduce){.welcome-content,.welcome-pulse{animation:none}.enter-arena{transition:none}}
+    @media(max-width:480px){.welcome-screen{padding:18px}.welcome-title{letter-spacing:-4px}.welcome-chip{font-size:8px;letter-spacing:1px}.welcome-corner{width:25px;height:25px}.welcome-corner-tl{top:12px;left:12px}.welcome-corner-br{bottom:12px;right:12px}.welcome-meta{gap:8px;font-size:8px}}
     @media(max-width:780px){.intro{align-items:flex-start}.workspace{grid-template-columns:1fr}.rounds{grid-template-columns:1fr;margin:18px 0}.timer{min-width:98px;padding:9px}.timer strong{font-size:23px}textarea{height:300px}}
     @media(max-width:480px){header{padding:13px 15px}.tag{display:none}main{padding:23px 12px 40px}.intro{display:block}.timer{display:inline-block;margin-top:14px}.round{padding:11px;gap:9px}.round .num{width:31px;height:31px}.round small{font-size:11px}.hint{width:100%;margin-left:0}.actions .btn{flex:1}.participant-fields{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
+<section id="welcomeScreen" class="welcome-screen" aria-label="BUG-404 welcome">
+  <div class="welcome-grid"></div>
+  <div class="welcome-content">
+    <div class="welcome-chip"><span class="welcome-pulse"></span> T.J.S. ENGINEERING COLLEGE · DEBUGGING CHALLENGE</div>
+    <div class="welcome-mark">&lt;/&gt;</div>
+    <p class="welcome-eyebrow">THE CODE IS BROKEN. ARE YOU READY?</p>
+    <h1 class="welcome-title">BUG<span>-404</span></h1>
+    <p class="welcome-tagline">FIND IT. FIX IT. OWN THE CODE.</p>
+    <p class="welcome-copy">Think fast. Debug smart. Beat the clock.<br>Step into the Python debugging arena.</p>
+    <button id="enterArenaBtn" class="enter-arena" type="button">ENTER THE ARENA <span aria-hidden="true">→</span></button>
+    <div class="welcome-meta"><span>01 / REGISTER</span><i></i><span>02 / DEBUG</span><i></i><span>03 / CLIMB THE LEADERBOARD</span></div>
+  </div>
+  <div class="welcome-corner welcome-corner-tl"></div><div class="welcome-corner welcome-corner-br"></div>
+</section>
 <header>
   <div class="brand"><span class="logo">&lt;/&gt;</span><span>BUG-404</span></div>
   <span class="tag">DEBUGGING ARENA · PYTHON</span>
@@ -41,8 +79,8 @@
   </section>
 
   <section class="participant-fields" aria-label="Team registration">
-    <div><label for="teamName">TEAM NAME</label><input id="teamName" type="text" maxlength="100" autocomplete="off" placeholder="Enter team name" required></div>
-    <div><label for="participantCount">NUMBER OF PARTICIPANTS</label><select id="participantCount" required><option value="1">1 participant · Solo</option><option value="2">2 participants · Duo</option><option value="3" selected>3 participants · Team</option></select></div>
+    <div id="teamNameField" style="display:none"><label for="teamName">TEAM NAME</label><input id="teamName" type="text" maxlength="100" autocomplete="off" placeholder="Required for duo or team"></div>
+    <div><label for="participantCount">NUMBER OF PARTICIPANTS</label><select id="participantCount" required><option value="1" selected>1 participant · Solo</option><option value="2">2 participants · Duo</option><option value="3">3 participants · Team</option></select></div>
     <div><label for="participantYear">YEAR OF STUDY</label><input id="participantYear" type="text" maxlength="30" autocomplete="off" placeholder="e.g. II Year" required></div>
     <div><label for="participantDepartment">DEPARTMENT</label><input id="participantDepartment" type="text" maxlength="100" autocomplete="organization-title" placeholder="e.g. CSE" required></div>
     <div><label for="participantCollege">COLLEGE</label><input id="participantCollege" type="text" maxlength="150" autocomplete="organization" placeholder="Enter college name" required></div>
@@ -146,6 +184,10 @@ print("Five or less")</textarea>
   restoreParticipantDetails();
   function updateMemberFields() {
     const count = Number($("participantCount").value || 1);
+    const teamField = $("teamNameField");
+    teamField.style.display = count >= 2 ? "" : "none";
+    $("teamName").required = count >= 2;
+    if (count === 1) $("teamName").value = "";
     [2, 3].forEach((n) => {
       const wrapper = $("member" + n + "Field");
       const field = $("member" + n + "Name");
@@ -386,12 +428,13 @@ print("Five or less")</textarea>
   }
 
   function sendSubmission(status, output, code) {
-    const teamName = $("teamName").value.trim();
     const participantCount = Number($("participantCount").value || 1);
+    const teamName = participantCount >= 2 ? $("teamName").value.trim() : "";
+    const participantCountForName = participantCount;
     const memberNames = [1, 2, 3]
       .slice(0, participantCount)
       .map((n) => $("member" + n + "Name").value.trim());
-    const name = teamName;
+    const name = participantCountForName === 1 ? memberNames[0] : teamName;
     const year = $("participantYear").value.trim();
     const department = $("participantDepartment").value.trim();
     const college = $("participantCollege").value.trim();
@@ -421,8 +464,9 @@ print("Five or less")</textarea>
 
   function executeCode(isSubmission) {
     if (isSubmission) {
+      const participantCount = Number($("participantCount").value || 1);
       const requiredFields = [
-        ["teamName", "team name"],
+        ...(participantCount >= 2 ? [["teamName", "team name"]] : []),
         ["participantYear", "year of study"],
         ["participantDepartment", "department"],
         ["participantCollege", "college name"],
@@ -486,6 +530,12 @@ print("Five or less")</textarea>
     $("round2Tab").setAttribute("aria-pressed", "true");
     $("round1Questions").style.display = "none";
     showQuestion(3);
+  });
+  // Welcome screen: enter the arena to reveal registration and the challenge.
+  $("enterArenaBtn").addEventListener("click", () => {
+    $("welcomeScreen").style.transition = "opacity .35s ease";
+    $("welcomeScreen").style.opacity = "0";
+    setTimeout(() => { $("welcomeScreen").remove(); $("member1Name").focus(); }, 360);
   });
   // Plain textarea intentionally has no indentation, autocomplete, or bracket-pair helpers.
   updateTimer();
