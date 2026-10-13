@@ -40,11 +40,15 @@
     <div class="timer" aria-live="polite"><span>Time remaining</span><strong id="timer">10:00</strong></div>
   </section>
 
-  <section class="participant-fields" aria-label="Participant details">
-    <div><label for="participantName">PARTICIPANT NAME</label><input id="participantName" type="text" maxlength="100" autocomplete="name" placeholder="Enter participant name" required></div>
-    <div><label for="participantYear">YEAR</label><input id="participantYear" type="text" maxlength="30" autocomplete="off" placeholder="e.g. II Year" required></div>
-    <div><label for="participantDepartment">DEPARTMENT</label><input id="participantDepartment" type="text" maxlength="100" autocomplete="organization-title" placeholder="Enter department" required></div>
+  <section class="participant-fields" aria-label="Team registration">
+    <div><label for="teamName">TEAM NAME</label><input id="teamName" type="text" maxlength="100" autocomplete="off" placeholder="Enter team name" required></div>
+    <div><label for="participantCount">NUMBER OF PARTICIPANTS</label><select id="participantCount" required><option value="1">1 participant · Solo</option><option value="2">2 participants · Duo</option><option value="3" selected>3 participants · Team</option></select></div>
+    <div><label for="participantYear">YEAR OF STUDY</label><input id="participantYear" type="text" maxlength="30" autocomplete="off" placeholder="e.g. II Year" required></div>
+    <div><label for="participantDepartment">DEPARTMENT</label><input id="participantDepartment" type="text" maxlength="100" autocomplete="organization-title" placeholder="e.g. CSE" required></div>
     <div><label for="participantCollege">COLLEGE</label><input id="participantCollege" type="text" maxlength="150" autocomplete="organization" placeholder="Enter college name" required></div>
+    <div class="member-name-field"><label for="member1Name">PARTICIPANT 1 NAME</label><input id="member1Name" type="text" maxlength="100" autocomplete="off" placeholder="Enter participant name" required></div>
+    <div class="member-name-field" id="member2Field"><label for="member2Name">PARTICIPANT 2 NAME</label><input id="member2Name" type="text" maxlength="100" autocomplete="off" placeholder="Enter participant name"></div>
+    <div class="member-name-field" id="member3Field"><label for="member3Name">PARTICIPANT 3 NAME</label><input id="member3Name" type="text" maxlength="100" autocomplete="off" placeholder="Enter participant name"></div>
   </section>
 
   <div class="rounds" role="group" aria-label="Choose round">
@@ -103,10 +107,14 @@ print("Five or less")</textarea>
 
   // Preserve participant details through submissions and accidental refreshes.
   const participantFieldIds = [
-    "participantName",
+    "teamName",
+    "participantCount",
     "participantYear",
     "participantDepartment",
-    "participantCollege"
+    "participantCollege",
+    "member1Name",
+    "member2Name",
+    "member3Name"
   ];
   const participantStorageKey = "bug404ParticipantDetails";
 
@@ -136,10 +144,27 @@ print("Five or less")</textarea>
   }
 
   restoreParticipantDetails();
+  function updateMemberFields() {
+    const count = Number($("participantCount").value || 1);
+    [2, 3].forEach((n) => {
+      const wrapper = $("member" + n + "Field");
+      const field = $("member" + n + "Name");
+      const visible = count >= n;
+      wrapper.style.display = visible ? "" : "none";
+      field.required = visible;
+      if (!visible) field.value = "";
+    });
+    saveParticipantDetails();
+  }
   participantFieldIds.forEach((id) => {
     const field = $(id);
-    if (field) field.addEventListener("input", saveParticipantDetails);
+    if (field) {
+      field.addEventListener("input", saveParticipantDetails);
+      field.addEventListener("change", saveParticipantDetails);
+    }
   });
+  $("participantCount").addEventListener("change", updateMemberFields);
+  updateMemberFields();
   const tasks = {
     1: {
       round: 1,
@@ -361,13 +386,21 @@ print("Five or less")</textarea>
   }
 
   function sendSubmission(status, output, code) {
-    const name = $("participantName").value.trim();
+    const teamName = $("teamName").value.trim();
+    const participantCount = Number($("participantCount").value || 1);
+    const memberNames = [1, 2, 3]
+      .slice(0, participantCount)
+      .map((n) => $("member" + n + "Name").value.trim());
+    const name = teamName;
     const year = $("participantYear").value.trim();
     const department = $("participantDepartment").value.trim();
     const college = $("participantCollege").value.trim();
     const timeTaken = Object.keys(timeLeft).reduce((total, id) => total + (600 - timeLeft[id]), 0);
     const payload = {
       name,
+      teamName,
+      participantCount,
+      memberNames,
       year,
       department,
       college,
@@ -389,10 +422,12 @@ print("Five or less")</textarea>
   function executeCode(isSubmission) {
     if (isSubmission) {
       const requiredFields = [
-        ["participantName", "participant name"],
-        ["participantYear", "year"],
+        ["teamName", "team name"],
+        ["participantYear", "year of study"],
         ["participantDepartment", "department"],
-        ["participantCollege", "college name"]
+        ["participantCollege", "college name"],
+        ...[1, 2, 3].slice(0, Number($("participantCount").value || 1))
+          .map((n) => ["member" + n + "Name", "participant " + n + " name"])
       ];
       const missing = requiredFields.find(([id]) => !$(id).value.trim());
       if (missing) {
