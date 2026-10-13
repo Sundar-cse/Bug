@@ -228,38 +228,38 @@
   const tasks = {
     1: {
       round: 1,
-      title: "Debug the number classifier",
-      text: "Fix the function so it returns \"Greater\" for numbers above 5 and \"Five or less\" for all other numbers. It must work for every test value, not just 7.",
-      hint: "Repair the syntax and indentation first. The checker tests values above, equal to, and below 5.",
-      difficulty: "MEDIUM",
-      code: 'def classify_number(number)\n    if number > 5\n    return "Greater"\n    else:\n    return "Five or less"'
+      title: "Longest Increasing Streak",
+      text: "Repair the function so it returns the length of the longest CONTIGUOUS strictly increasing streak. Equal values break a streak, and the streak may begin anywhere in the list. Do not sort the input.",
+      hint: "Check the initial streak length, what happens when the sequence drops or repeats, and whether a one-element list should return 1.",
+      difficulty: "HARD",
+      code: 'def longest_streak(values):\n    if not values:\n        return 0\n    best = 0\n    current = 0\n    for i in range(1, len(values)):\n        if values[i] > values[i - 1]:\n            current += 1\n        else:\n            current = 1\n        best = max(best, current)\n    return best'
     },
     2: {
       round: 1,
-      title: "Fix the range-sum function",
-      text: "The function should return the sum of every integer from 1 through n, inclusive. It currently misses a boundary value.",
-      hint: "Python's range stop value is excluded. Check the loop boundary and test small values too.",
-      difficulty: "HARD",
-      code: 'def sum_to_n(n):\n    total = 0\n    for number in range(1, n):\n        total += number\n    return total'
+      title: "Merge Overlapping Intervals",
+      text: "Given unsorted [start, end] intervals, return them sorted and merge every overlapping OR touching interval. The input may contain nested intervals and repeated boundaries. Do not mutate the original list.",
+      hint: "Sort by start first. Compare each interval with the end of the last merged interval, not just the previous input interval. Touching boundaries also merge.",
+      difficulty: "VERY HARD",
+      code: 'def merge_intervals(intervals):\n    if not intervals:\n        return []\n    intervals.sort()\n    merged = [intervals[0]]\n    for start, end in intervals[1:]:\n        last_start, last_end = merged[-1]\n        if start < last_end:\n            merged[-1][1] = min(last_end, end)\n        else:\n            merged.append([start, end])\n    return merged'
     },
     3: {
       round: 2,
-      title: "Second-largest distinct number",
-      text: "Fix the function to return the second-largest DISTINCT value. Duplicate maximum values must not count twice; the list can contain negative values.",
-      hint: "Make sure a value equal to the largest is not accepted as the second-largest. Consider what happens with repeated and negative values.",
+      title: "Longest Subarray With Target Sum",
+      text: "Return the length of the longest contiguous subarray whose sum equals target. Values can be positive, zero, or negative. Aim for O(n) time; a sliding-window-only solution will fail.",
+      hint: "Use prefix sums and remember the EARLIEST index for each prefix sum. Replacing an earlier index with a later one can lose the longest valid answer.",
       difficulty: "EXPERT",
-      code: 'def second_largest_distinct(numbers):\n    numbers.sort()\n    return numbers[-2]'
+      code: 'def longest_target_subarray(values, target):\n    first_seen = {0: 0}\n    prefix = 0\n    best = 0\n    for i, value in enumerate(values, start=1):\n        prefix += value\n        needed = prefix - target\n        if needed in first_seen:\n            best = max(best, i - first_seen[needed])\n        first_seen[prefix] = i\n    return best'
     }
   };
   const validationTests = {
-    1: '\nprint(classify_number(7))\nprint(classify_number(5))\nprint(classify_number(-3))',
-    2: '\nprint(sum_to_n(5))\nprint(sum_to_n(1))\nprint(sum_to_n(10))',
-    3: '\nprint(second_largest_distinct([12, 7, 19, 19, 4, 15]))\nprint(second_largest_distinct([5, 5, 4, 4, 1]))\nprint(second_largest_distinct([-8, -2, -2, -5]))'
+    1: '\nprint(longest_streak([1, 2, 2, 3, 4, 1, 5, 6, 7]))\nprint(longest_streak([9, 8, 7]))\nprint(longest_streak([2, 3, 4, 1, 2, 3]))\nprint(longest_streak([42]))',
+    2: '\nprint(merge_intervals([[8, 10], [1, 3], [2, 6], [15, 18], [6, 8]]))\nprint(merge_intervals([[1, 4], [4, 5]]))\nprint(merge_intervals([[5, 7], [2, 3], [3, 4]]))',
+    3: '\nprint(longest_target_subarray([10, 5, 2, 7, 1, 9], 15))\nprint(longest_target_subarray([1, -1, 5, -2, 3], 3))\nprint(longest_target_subarray([-2, -1, 2, 1], 0))'
   };
   const expectedOutputs = {
-    1: "Greater\nFive or less\nFive or less",
-    2: "15\n1\n55",
-    3: "15\n4\n-5"
+    1: "4\n1\n3\n1",
+    2: "[[1, 10], [15, 18]]\n[[1, 5]]\n[[2, 4], [5, 7]]",
+    3: "4\n4\n4"
   };
   let currentQuestion = 1;
   const timeLeft = {1:600, 2:600, 3:600};
