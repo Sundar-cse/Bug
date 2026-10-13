@@ -23,6 +23,7 @@
     .question{padding:19px}.question h3{font-size:20px;margin:0 0 10px}.question p{color:var(--muted);margin:0 0 16px}.info{background:#111a11;border-left:3px solid var(--green2);padding:12px;color:#d8e5c8;font-size:13px}.info strong{color:var(--green)}.rules{padding-left:18px;color:var(--muted);font-size:13px}.rules li{margin:7px 0}.rules li::marker{color:var(--green2)}
     .editorhead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 15px;border-bottom:1px solid var(--line);background:#202f1e}.dots{display:flex;gap:6px}.dots i{width:8px;height:8px;border-radius:1px;background:var(--green2)}.file{font:12px ui-monospace,monospace;color:var(--muted);margin-left:9px}.editorlabel{display:flex;align-items:center}
     textarea{display:block;width:100%;height:340px;resize:vertical;border:0;outline:0;background:#0b120b;color:#dff8c9;padding:19px;font:14px/1.75 ui-monospace,SFMono-Regular,Consolas,monospace;tab-size:4;white-space:pre;overflow:auto;border-bottom:1px solid var(--line);border-radius:0;caret-color:var(--green)}
+    .register-actions{display:flex;justify-content:center;margin:-6px 0 20px}.register-actions .btn{min-width:min(100%,320px);padding:13px 18px;font-size:13px}
     .participant-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0 8px;padding:14px;border:1px solid var(--line);background:#172117}.participant-fields label{display:block;color:var(--muted);font-size:11px;font-weight:800;letter-spacing:1px;margin-bottom:5px}.participant-fields input{width:100%;min-width:0;padding:10px 11px;border:1px solid var(--line);border-radius:3px;background:#0b120b;color:var(--text);font:14px system-ui,sans-serif}.participant-fields input:focus{outline:2px solid var(--green2);outline-offset:1px}.actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:13px 15px;background:#172117}.btn{border:1px solid #496342;border-radius:3px;padding:10px 15px;font-weight:800;font-size:12px;letter-spacing:.3px;cursor:pointer;color:var(--text);background:#263825}.btn.primary{background:var(--green);border-color:var(--green);color:#14200e}.btn.submit{background:#d9eac3;border-color:#d9eac3;color:#15210f}.btn:disabled{opacity:.55;cursor:wait}.hint{font-size:11px;color:var(--muted);margin-left:auto}
     .output{border-top:1px solid var(--line)}.outputhead{padding:11px 15px;display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:11px;letter-spacing:1px}.status{font-size:10px;font-weight:900;letter-spacing:.5px}.status.ready{color:var(--green)}.status.error{color:var(--red)}.status.running{color:var(--orange)}pre{margin:0;min-height:86px;max-height:190px;overflow:auto;padding:14px 16px 17px;background:#0b120b;color:#d8e5c8;font:13px/1.6 ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere}.leaderboard{margin:20px 0 24px;background:#172117;border:1px solid var(--line);box-shadow:4px 4px 0 #111a10;overflow:hidden}.leaderboard-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 17px;background:#202f1e;border-bottom:1px solid var(--line)}.leaderboard-head h2{font-size:12px;letter-spacing:1.4px;margin:0}.leaderboard-wrap{overflow-x:auto}.leaderboard table{width:100%;border-collapse:collapse;min-width:470px;text-align:left;font-size:13px}.leaderboard th,.leaderboard td{padding:11px 14px;border-bottom:1px solid #30452d}.leaderboard th{color:var(--muted);font-size:10px;letter-spacing:1px;background:#111a11}.leaderboard td{color:var(--text)}.leaderboard td.score{color:var(--green);font-weight:900}.leaderboard-empty{padding:16px;color:var(--muted);font-size:13px}.leaderboard-actions{display:flex;align-items:center;gap:10px}.leaderboard-actions .btn{padding:7px 10px}.leaderboard-status{font-size:11px;color:var(--muted)}.bottomnote{margin:19px 2px;color:var(--muted);font-size:12px}
     .final-result-card{margin-top:14px}.final-result-body{padding:16px;display:flex;flex-direction:column;align-items:flex-start;gap:12px}.final-result-body p{margin:0;color:var(--muted);font-size:13px}.final-result{width:100%;border:1px solid var(--green);border-radius:8px;background:#152315;padding:16px;display:flex;gap:24px;flex-wrap:wrap}.final-result[hidden]{display:none}.final-result div{display:flex;flex-direction:column;gap:5px}.final-result span{font-size:11px;color:var(--muted);text-transform:uppercase}.final-result strong{font-size:24px;color:var(--green)}.final-result #finalMessage{flex-basis:100%;color:var(--text)}
@@ -89,6 +90,7 @@
     <div class="member-name-field" id="member2Field"><label for="member2Name">PARTICIPANT 2 NAME</label><input id="member2Name" type="text" maxlength="100" autocomplete="off" placeholder="Enter participant name"></div>
     <div class="member-name-field" id="member3Field"><label for="member3Name">PARTICIPANT 3 NAME</label><input id="member3Name" type="text" maxlength="100" autocomplete="off" placeholder="Enter participant name"></div>
   </section>
+  <div class="register-actions"><button class="btn primary" id="registerStartBtn" type="button">Register &amp; Start Challenge</button></div>
 
   <div class="rounds" role="group" aria-label="Choose round">
     <button class="round" id="round1Tab" aria-pressed="true"><span class="num">01</span><span><strong>Round 1</strong><small>Two questions · 10 minutes each</small></span></button>
@@ -274,6 +276,7 @@
   let submittedCode = "";
   const attemptedQuestions = {1:false, 2:false, 3:false};
   let finalResultSubmitted = false;
+  let registered = false;
 
   function setStatus(text, kind) {
     $("status").textContent = text;
@@ -310,6 +313,7 @@
     $("timer").style.color = seconds <= 60 ? "var(--red)" : "";
   }
   function startTimer() {
+    if (!registered) return;
     if (countdown) clearInterval(countdown);
     countdown = setInterval(() => {
       if (seconds > 0) {
@@ -568,7 +572,7 @@
         return;
       }
     }
-    if (!ready || running || seconds <= 0 || (isSubmission && solved[currentQuestion])) return;
+    if (!registered || !ready || running || seconds <= 0 || (isSubmission && solved[currentQuestion])) return;
     submitting = isSubmission;
     submittedCode = $("code").value;
     running = true;
@@ -625,8 +629,61 @@
   $("enterArenaBtn").addEventListener("click", () => {
     $("welcomeScreen").style.transition = "opacity .35s ease";
     $("welcomeScreen").style.opacity = "0";
-    setTimeout(() => { $("welcomeScreen").remove(); $("member1Name").focus(); startTimer(); }, 360);
+    setTimeout(() => { $("welcomeScreen").remove(); $("member1Name").focus(); }, 360);
   });
+  $("registerStartBtn").addEventListener("click", () => {
+    if (registered) return;
+    const count = Number($("participantCount").value || 1);
+    const requiredFields = [
+      ...(count >= 2 ? [["teamName", "team name"]] : []),
+      ["participantYear", "year of study"],
+      ["participantDepartment", "department"],
+      ["participantCollege", "college name"],
+      ...[1, 2, 3].slice(0, count).map(n => ["member" + n + "Name", "participant " + n + " name"])
+    ];
+    const missing = requiredFields.find(([id]) => !$(id).value.trim());
+    if (missing) {
+      printOutput("Enter your " + missing[1] + " to register and start.");
+      setStatus("REGISTRATION REQUIRED", "error");
+      $(missing[0]).focus();
+      return;
+    }
+    registered = true;
+    saveParticipantDetails();
+    participantFieldIds.forEach(id => { if ($(id)) $(id).disabled = true; });
+    $("registerStartBtn").disabled = true;
+    $("registerStartBtn").textContent = "✓ Registered — Challenge Started";
+    startTimer();
+    printOutput("Registration complete. Your 10-minute timer has started.");
+    setStatus(ready ? "READY" : "RUNTIME LOADING…", ready ? "ready" : "running");
+    $("runBtn").disabled = !ready;
+    $("submitBtn").disabled = !ready;
+  });
+
+  // Block common clipboard actions in the code editor. Screenshots cannot be reliably blocked by a website.
+  const codeEditor = $("code");
+  ["copy", "cut", "paste", "contextmenu", "dragstart", "drop"].forEach(type => {
+    codeEditor.addEventListener(type, event => {
+      event.preventDefault();
+      if (type === "paste") {
+        printOutput("Pasting is disabled. Please type your code manually.");
+        setStatus("PASTE BLOCKED", "error");
+      }
+    });
+  });
+  codeEditor.addEventListener("keydown", event => {
+    const key = event.key.toLowerCase();
+    if ((event.ctrlKey || event.metaKey) && ["c", "x", "v", "insert"].includes(key)) {
+      event.preventDefault();
+      printOutput("Copying and pasting are disabled in the code editor. Type your code manually.");
+      setStatus("CLIPBOARD BLOCKED", "error");
+    }
+    if (event.shiftKey && event.key === "Insert") event.preventDefault();
+  });
+  // Keep the editor locked until participant registration is complete.
+  $("code").readOnly = true;
+  $("runBtn").disabled = true;
+  $("submitBtn").disabled = true;
   // Plain textarea intentionally has no indentation, autocomplete, or bracket-pair helpers.
   updateTimer();
   spawnWorker();
