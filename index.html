@@ -100,10 +100,10 @@
     <aside class="card">
       <div class="cardhead"><h2>YOUR CHALLENGE</h2><span class="pill" id="difficulty">EASY</span></div>
       <div class="question">
-        <div class="question-switcher" id="round1Questions" role="group" aria-label="Round 1 questions"><button type="button" id="question1" aria-pressed="true">Question 1 · Easy</button><button type="button" id="question2" aria-pressed="false">Question 2 · Medium</button></div>
-        <h3 id="questionTitle">Fix the conditional</h3>
-        <p id="questionText">Repair the program so it prints “Greater” when the number is greater than 5, and “Five or less” otherwise.</p>
-        <div class="info"><strong>Task:</strong> <span id="taskHint">Find and fix the errors. The program should run without errors and follow the task description.</span></div>
+        <div class="question-switcher" id="round1Questions" role="group" aria-label="Round 1 questions"><button type="button" id="question1" aria-pressed="true">Question 1 · Medium</button><button type="button" id="question2" aria-pressed="false">Question 2 · Hard</button></div>
+        <h3 id="questionTitle">Debug the number classifier</h3>
+        <p id="questionText">Fix the function so it returns "Greater" for numbers above 5 and "Five or less" for all other numbers. It must work for every test value, not just 7.</p>
+        <div class="info"><strong>Task:</strong> <span id="taskHint">Repair the syntax and indentation first. The checker tests values above, equal to, and below 5.</span></div>
         <ul class="rules">
           <li>Submit your corrected code for checking.</li>
           <li>Type every correction yourself.</li>
@@ -117,11 +117,11 @@
     <section class="card">
       <div class="editorhead"><div class="editorlabel"><span class="dots"><i></i><i></i><i></i></span><span class="file">main.py</span></div><span class="pill">PLAIN EDITOR</span></div>
       <label for="code" style="position:absolute;left:-10000px">Python code editor</label>
-      <textarea id="code" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" data-gramm="false" data-gramm_editor="false" aria-label="Python code editor" wrap="off">number = 7
-if number > 5
-print("Greater")
-else:
-print("Five or less")</textarea>
+      <textarea id="code" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" data-gramm="false" data-gramm_editor="false" aria-label="Python code editor" wrap="off">def classify_number(number)
+    if number > 5
+    return "Greater"
+    else:
+    return "Five or less"</textarea>
       <div class="actions"><button class="btn primary" id="runBtn">▶ Run code</button><button class="btn submit" id="submitBtn">✓ Submit answer</button><button class="btn" id="resetBtn">Reset code</button><span class="hint">Plain editor · no coding assists</span></div>
       <div class="output"><div class="outputhead"><span>OUTPUT / ERROR</span><span class="status ready" id="status">RUNTIME LOADING…</span></div><pre id="output" aria-live="polite">Preparing Python runtime. This may take a few seconds on first load…</pre></div>
     </section>
