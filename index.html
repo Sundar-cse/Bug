@@ -25,6 +25,7 @@
     textarea{display:block;width:100%;height:340px;resize:vertical;border:0;outline:0;background:#0b120b;color:#dff8c9;padding:19px;font:14px/1.75 ui-monospace,SFMono-Regular,Consolas,monospace;tab-size:4;white-space:pre;overflow:auto;border-bottom:1px solid var(--line);border-radius:0;caret-color:var(--green)}
     .participant-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0 8px;padding:14px;border:1px solid var(--line);background:#172117}.participant-fields label{display:block;color:var(--muted);font-size:11px;font-weight:800;letter-spacing:1px;margin-bottom:5px}.participant-fields input{width:100%;min-width:0;padding:10px 11px;border:1px solid var(--line);border-radius:3px;background:#0b120b;color:var(--text);font:14px system-ui,sans-serif}.participant-fields input:focus{outline:2px solid var(--green2);outline-offset:1px}.actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:13px 15px;background:#172117}.btn{border:1px solid #496342;border-radius:3px;padding:10px 15px;font-weight:800;font-size:12px;letter-spacing:.3px;cursor:pointer;color:var(--text);background:#263825}.btn.primary{background:var(--green);border-color:var(--green);color:#14200e}.btn.submit{background:#d9eac3;border-color:#d9eac3;color:#15210f}.btn:disabled{opacity:.55;cursor:wait}.hint{font-size:11px;color:var(--muted);margin-left:auto}
     .output{border-top:1px solid var(--line)}.outputhead{padding:11px 15px;display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:11px;letter-spacing:1px}.status{font-size:10px;font-weight:900;letter-spacing:.5px}.status.ready{color:var(--green)}.status.error{color:var(--red)}.status.running{color:var(--orange)}pre{margin:0;min-height:86px;max-height:190px;overflow:auto;padding:14px 16px 17px;background:#0b120b;color:#d8e5c8;font:13px/1.6 ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere}.leaderboard{margin:20px 0 24px;background:#172117;border:1px solid var(--line);box-shadow:4px 4px 0 #111a10;overflow:hidden}.leaderboard-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 17px;background:#202f1e;border-bottom:1px solid var(--line)}.leaderboard-head h2{font-size:12px;letter-spacing:1.4px;margin:0}.leaderboard-wrap{overflow-x:auto}.leaderboard table{width:100%;border-collapse:collapse;min-width:470px;text-align:left;font-size:13px}.leaderboard th,.leaderboard td{padding:11px 14px;border-bottom:1px solid #30452d}.leaderboard th{color:var(--muted);font-size:10px;letter-spacing:1px;background:#111a11}.leaderboard td{color:var(--text)}.leaderboard td.score{color:var(--green);font-weight:900}.leaderboard-empty{padding:16px;color:var(--muted);font-size:13px}.leaderboard-actions{display:flex;align-items:center;gap:10px}.leaderboard-actions .btn{padding:7px 10px}.leaderboard-status{font-size:11px;color:var(--muted)}.bottomnote{margin:19px 2px;color:var(--muted);font-size:12px}
+    .final-result-card{margin-top:14px}.final-result-body{padding:16px;display:flex;flex-direction:column;align-items:flex-start;gap:12px}.final-result-body p{margin:0;color:var(--muted);font-size:13px}.final-result{width:100%;border:1px solid var(--green);border-radius:8px;background:#152315;padding:16px;display:flex;gap:24px;flex-wrap:wrap}.final-result[hidden]{display:none}.final-result div{display:flex;flex-direction:column;gap:5px}.final-result span{font-size:11px;color:var(--muted);text-transform:uppercase}.final-result strong{font-size:24px;color:var(--green)}.final-result #finalMessage{flex-basis:100%;color:var(--text)}
     /* BUG-404 cinematic welcome screen */
     .welcome-screen{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at 50% 45%,#243b25 0%,#10170f 54%,#080d09 100%);color:#f0f4df;padding:24px}
     .welcome-grid{position:absolute;inset:0;opacity:.2;background-image:linear-gradient(#a8f05b22 1px,transparent 1px),linear-gradient(90deg,#a8f05b22 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,transparent,#000 20%,#000 80%,transparent)}
@@ -125,6 +126,19 @@
       <div class="actions"><button class="btn primary" id="runBtn">▶ Run code</button><button class="btn submit" id="submitBtn">✓ Submit answer</button><button class="btn" id="resetBtn">Reset code</button><span class="hint">Plain editor · no coding assists</span></div>
       <div class="output"><div class="outputhead"><span>OUTPUT / ERROR</span><span class="status ready" id="status">RUNTIME LOADING…</span></div><pre id="output" aria-live="polite">Preparing Python runtime. This may take a few seconds on first load…</pre></div>
     </section>
+  </section>
+
+  <section class="card final-result-card">
+    <div class="cardhead"><h2>FINAL RESULT</h2><span class="pill">3 QUESTIONS · 30 POINTS</span></div>
+    <div class="final-result-body">
+      <p id="finalSubmitHint">Submit an answer for each of the three questions to unlock your final result.</p>
+      <button class="btn submit" id="finalSubmitBtn" type="button" disabled>Submit final result</button>
+      <div id="finalResult" class="final-result" hidden>
+        <div><span>Your score</span><strong id="finalScore">0 / 30</strong></div>
+        <div><span>Percentage</span><strong id="finalPercentage">0%</strong></div>
+        <p id="finalMessage"></p>
+      </div>
+    </div>
   </section>
 
   <section class="leaderboard" aria-labelledby="leaderboardTitle">
@@ -258,6 +272,8 @@
   let runHadError = false;
   let runTimer = null;
   let submittedCode = "";
+  const attemptedQuestions = {1:false, 2:false, 3:false};
+  let finalResultSubmitted = false;
 
   function setStatus(text, kind) {
     $("status").textContent = text;
@@ -362,8 +378,7 @@
       submitting = false;
       const expected = expectedOutputs[currentQuestion];
       const isCorrect = !hasError && text.trim() === expected;
-      // Save only successful answers; incorrect attempts must not create/update leaderboard entries.
-      if (isCorrect) sendSubmission("CORRECT", text, submittedCode);
+      attemptedQuestions[currentQuestion] = true;
       if (isCorrect) {
         solved[currentQuestion] = true;
         printOutput("Correct answer! Challenge cleared.");
@@ -371,10 +386,11 @@
         $("submitBtn").textContent = "✓ Correct";
         $("submitBtn").disabled = true;
       } else {
-        printOutput("Incorrect answer — try again.");
+        printOutput("Incorrect answer — try again. You can retry, or finish after submitting each question at least once.");
         setStatus("INCORRECT", "error");
         $("submitBtn").disabled = seconds <= 0;
       }
+      updateFinalSubmitButton();
     } else {
       printOutput(text || (hasError ? "Program stopped with an error." : "Program finished without printing anything."));
       setStatus(hasError ? "ERROR" : "FINISHED", hasError ? "error" : "ready");
@@ -385,6 +401,38 @@
   }
   const SHEETS_ENDPOINT = "https://script.google.com/macros/s/AKfycbzOxCk9jyadUaRpwghFJVx4D3mSMAY_NsJUJ64ITe91QZ1Ry9YFSCvtVX95uI-oKSk/exec";
   let leaderboardCallbackId = 0;
+
+  function updateFinalSubmitButton() {
+    const allAttempted = [1, 2, 3].every((id) => attemptedQuestions[id]);
+    $("finalSubmitBtn").disabled = !allAttempted || finalResultSubmitted;
+    $("finalSubmitBtn").textContent = finalResultSubmitted ? "✓ Result submitted" : "Submit final result";
+    $("finalSubmitHint").textContent = allAttempted
+      ? "All three questions have been submitted. You can now submit your final score."
+      : "Submit an answer for each of the three questions to unlock your final result.";
+  }
+
+  function submitFinalResult() {
+    if (finalResultSubmitted || ![1, 2, 3].every((id) => attemptedQuestions[id])) return;
+    finalResultSubmitted = true;
+    const score = [1, 2, 3].filter((id) => solved[id]).length * 10;
+    const percentage = Math.round((score / 30) * 100);
+    $("finalResult").hidden = false;
+    $("finalScore").textContent = score + " / 30";
+    $("finalPercentage").textContent = percentage + "%";
+    $("finalMessage").textContent = score === 30
+      ? "Excellent work — all three challenges solved!"
+      : "Your final result has been submitted. Thank you for participating!";
+    [1, 2, 3].forEach((id) => {
+      sendSubmission(id, solved[id] ? "CORRECT" : "INCORRECT",
+        solved[id] ? expectedOutputs[id] : "Not solved", "");
+    });
+    $("finalSubmitBtn").disabled = true;
+    $("finalSubmitBtn").textContent = "✓ Result submitted";
+    $("finalSubmitHint").textContent = "Your final score is shown above. The organizer can see it on the leaderboard after it refreshes.";
+    setStatus("RESULT SUBMITTED", "ready");
+    loadLeaderboard();
+    setTimeout(loadLeaderboard, 1800);
+  }
 
   function loadLeaderboard() {
     const rows = $("leaderboardRows");
@@ -441,7 +489,7 @@
     document.head.appendChild(script);
   }
 
-  function sendSubmission(status, output, code) {
+  function sendSubmission(questionId, status, output, code) {
     const participantCount = Number($("participantCount").value || 1);
     const teamName = participantCount >= 2 ? $("teamName").value.trim() : "";
     const participantCountForName = participantCount;
@@ -462,8 +510,8 @@
       department,
       college,
       timeTaken,
-      round: tasks[currentQuestion].round,
-      question: tasks[currentQuestion].title,
+      round: tasks[questionId].round,
+      question: tasks[questionId].title,
       code: code || "",
       output: output || "",
       status
@@ -521,7 +569,9 @@
   $("runBtn").addEventListener("click", () => executeCode(false));
   $("submitBtn").addEventListener("click", () => executeCode(true));
   $("refreshLeaderboard").addEventListener("click", loadLeaderboard);
+  $("finalSubmitBtn").addEventListener("click", submitFinalResult);
   loadLeaderboard();
+  updateFinalSubmitButton();
 
   $("resetBtn").addEventListener("click", () => {
     if (running) return;
