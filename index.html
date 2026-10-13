@@ -230,7 +230,7 @@ print("Five or less")</textarea>
       text: "Fix the function to return the second-largest DISTINCT value. Duplicate maximum values must not count twice; the list can contain negative values.",
       hint: "Make sure a value equal to the largest is not accepted as the second-largest. Consider what happens with repeated and negative values.",
       difficulty: "EXPERT",
-      code: 'def second_largest_distinct(numbers):\n    largest = numbers[0]\n    second_largest = float("-inf")\n    for number in numbers:\n        if number > largest:\n            second_largest = largest\n            largest = number\n        elif number > second_largest:\n            second_largest = number\n    return second_largest'
+      code: 'def second_largest_distinct(numbers):\n    numbers.sort()\n    return numbers[-2]'
     }
   };
   const validationTests = {
