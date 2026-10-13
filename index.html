@@ -368,7 +368,7 @@
       printOutput(text || (hasError ? "Program stopped with an error." : "Program finished without printing anything."));
       setStatus(hasError ? "ERROR" : "FINISHED", hasError ? "error" : "ready");
     }
-    timeLeft[currentQuestion] = seconds;
+    timeLeft[tasks[currentQuestion].round] = seconds;
     $("runBtn").disabled = !registered || (tasks[currentQuestion].language==="python"&&!ready) || seconds<=0;
     if (!solved[currentQuestion]) $("submitBtn").disabled = !registered || (tasks[currentQuestion].language==="python"&&!ready) || seconds<=0;
   }
