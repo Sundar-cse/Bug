@@ -322,7 +322,8 @@ print("Five or less")</textarea>
         $("submitBtn").disabled = seconds <= 0 || solved[currentQuestion];
         printOutput("Python is ready. Run your code when you are ready.");
       } else if (msg.type === "stdout") {
-        runOutput.push(msg.text);
+        // Pyodide's batched stdout callback omits line terminators; preserve them for multi-case checks.
+        runOutput.push(msg.text + "\n");
       } else if (msg.type === "stderr") {
         runOutput.push(msg.text);
         runHadError = true;
