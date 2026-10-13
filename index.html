@@ -76,7 +76,7 @@
 </header>
 <main>
   <section class="intro">
-    <div><div class="eyebrow">Find it. Fix it.</div><h1>Find it. Fix it.</h1><p class="sub">Read the task, repair the buggy program, and run your code. Complete all six challenges: three in Python and three in Java. Each has a 10-minute timer; maximum score is 60.</p></div>
+    <div><div class="eyebrow">Find it. Fix it.</div><h1>Find it. Fix it.</h1><p class="sub">Read the task, repair the buggy program, and run your code. Complete four debugging challenges: two in Python in Round 1 and two in Java in Round 2. Each round lasts 10 minutes; maximum score is 40.</p></div>
     <div class="timer" aria-live="polite"><span>Time remaining</span><strong id="timer">10:00</strong></div>
   </section>
 
@@ -93,8 +93,8 @@
   <div class="register-actions"><button class="btn primary" id="registerStartBtn" type="button">Register &amp; Start Challenge</button></div>
 
   <div class="rounds" role="group" aria-label="Choose round">
-    <button class="round" id="round1Tab" aria-pressed="true"><span class="num">01</span><span><strong>Round 1</strong><small>Four challenges · 10 minutes each</small></span></button>
-    <button class="round" id="round2Tab" aria-pressed="false"><span class="num">02</span><span><strong>Round 2</strong><small>Two challenges · 10 minutes each</small></span></button>
+    <button class="round" id="round1Tab" aria-pressed="true"><span class="num">01</span><span><strong>Round 1</strong><small>Python · 2 questions · 10 minutes total</small></span></button>
+    <button class="round" id="round2Tab" aria-pressed="false"><span class="num">02</span><span><strong>Round 2</strong><small>Java · 2 questions · 10 minutes total</small></span></button>
   </div>
 
 
@@ -103,7 +103,7 @@
     <aside class="card">
       <div class="cardhead"><h2>YOUR CHALLENGE</h2><span class="pill" id="difficulty">HARD</span></div>
       <div class="question">
-        <div class="question-switcher" id="round1Questions" role="group" aria-label="Choose a challenge" style="flex-wrap:wrap"><button type="button" id="question1" aria-pressed="true">Python 1</button><button type="button" id="question2" aria-pressed="false">Python 2</button><button type="button" id="question3" aria-pressed="false">Python 3</button><button type="button" id="question4" aria-pressed="false">Java 1</button><button type="button" id="question5" aria-pressed="false">Java 2</button><button type="button" id="question6" aria-pressed="false">Java 3</button></div>
+        <div class="question-switcher" id="round1Questions" role="group" aria-label="Choose a challenge" style="flex-wrap:wrap"><button type="button" id="question1" aria-pressed="true">Python 1</button><button type="button" id="question2" aria-pressed="false">Python 2</button><button type="button" id="question3" aria-pressed="false">Java 1</button><button type="button" id="question4" aria-pressed="false">Java 2</button></div>
         <h3 id="questionTitle">Debug the number classifier</h3>
         <p id="questionText">Fix the function so it returns "Greater" for numbers above 5 and "Five or less" for all other numbers. It must work for every test value, not just 7.</p>
         <div class="info"><strong>Task:</strong> <span id="taskHint">Repair the syntax and indentation first. The checker tests values above, equal to, and below 5.</span></div>
@@ -133,7 +133,7 @@
   <section class="card final-result-card">
     <div class="cardhead"><h2>FINAL RESULT</h2><span class="pill">6 CHALLENGES · 60 POINTS</span></div>
     <div class="final-result-body">
-      <p id="finalSubmitHint">Submit an answer for each of the six challenges to unlock your final result.</p>
+      <p id="finalSubmitHint">Submit an answer for each of the four challenges to unlock your final result.</p>
       <button class="btn submit" id="finalSubmitBtn" type="button" disabled>Submit final result</button>
       <div id="finalResult" class="final-result" hidden>
         <div><span>Your score</span><strong id="finalScore">0 / 30</strong></div>
@@ -226,18 +226,16 @@
   $("participantCount").addEventListener("change", updateMemberFields);
   updateMemberFields();
   const tasks = {
-    1:{language:"python",round:1,title:"Longest Increasing Streak",text:"Return the length of the longest contiguous strictly increasing streak. Equal values break a streak. Do not sort.",hint:"Check the starting length, repeated values, drops, and one-element lists.",difficulty:"HARD",code:'def longest_streak(values):\n    if not values:\n        return 0\n    best = 0\n    current = 0\n    for i in range(1, len(values)):\n        if values[i] > values[i - 1]:\n            current += 1\n        else:\n            current = 1\n        best = max(best, current)\n    return best',tests:'\nprint(longest_streak([1,2,2,3,4,1,5,6,7]))\nprint(longest_streak([9,8,7]))\nprint(longest_streak([2,3,4,1,2,3]))\nprint(longest_streak([42]))',expected:"4\n1\n3\n1"},
-    2:{language:"python",round:1,title:"Merge Overlapping Intervals",text:"Sort unsorted [start,end] intervals and merge every overlapping or touching interval. Handle nested intervals.",hint:"Sort first, compare against the last merged end, and keep the larger endpoint.",difficulty:"VERY HARD",code:'def merge_intervals(intervals):\n    if not intervals:\n        return []\n    intervals.sort()\n    merged = [intervals[0]]\n    for start, end in intervals[1:]:\n        last_start, last_end = merged[-1]\n        if start < last_end:\n            merged[-1][1] = min(last_end, end)\n        else:\n            merged.append([start, end])\n    return merged',tests:'\nprint(merge_intervals([[8,10],[1,3],[2,6],[15,18],[6,8]]))\nprint(merge_intervals([[1,4],[4,5]]))\nprint(merge_intervals([[5,7],[2,3],[3,4]]))',expected:"[[1, 10], [15, 18]]\n[[1, 5]]\n[[2, 4], [5, 7]]"},
-    3:{language:"python",round:2,title:"Longest Subarray With Target Sum",text:"Return the length of the longest contiguous subarray summing to target. Values may be positive, zero, or negative. Aim for O(n).",hint:"Use prefix sums and retain the earliest index for each sum.",difficulty:"EXPERT",code:'def longest_target_subarray(values, target):\n    first_seen = {0: 0}\n    prefix = 0\n    best = 0\n    for i, value in enumerate(values, start=1):\n        prefix += value\n        needed = prefix - target\n        if needed in first_seen:\n            best = max(best, i - first_seen[needed])\n        first_seen[prefix] = i\n    return best',tests:'\nprint(longest_target_subarray([10,5,2,7,1,9],15))\nprint(longest_target_subarray([1,-1,5,-2,3],3))\nprint(longest_target_subarray([-2,-1,2,1],0))',expected:"4\n4\n4"},
-    4:{language:"java",round:1,title:"Longest Increasing Streak · Java",text:"Fix this Java method to return the longest contiguous strictly increasing streak.",hint:"Track best/current lengths; handle empty and one-element arrays.",difficulty:"HARD",code:'static int longestStreak(int[] values) {\n    if (values.length == 0) return 0;\n    int best = 1, current = 1;\n    for (int i = 1; i < values.length; i++) {\n        if (values[i] > values[i - 1]) current++;\n        else current = 1;\n        best = Math.max(best, current);\n    }\n    return best;\n}',tests:'System.out.println(longestStreak(new int[]{1,2,2,3,4,1,5,6,7}));\nSystem.out.println(longestStreak(new int[]{9,8,7}));\nSystem.out.println(longestStreak(new int[]{2,3,4,1,2,3}));\nSystem.out.println(longestStreak(new int[]{42}));',expected:"4\n1\n3\n1"},
-    5:{language:"java",round:1,title:"Merge Overlapping Intervals · Java",text:"Fix this Java method to sort intervals and merge overlapping or touching intervals, including nested intervals.",hint:"Sort by start; compare with the last merged interval and retain the maximum end.",difficulty:"VERY HARD",code:'static int[][] mergeIntervals(int[][] intervals) {\n    if (intervals.length == 0) return new int[0][2];\n    Arrays.sort(intervals, (a,b) -> Integer.compare(a[0], b[0]));\n    List<int[]> merged = new ArrayList<>();\n    merged.add(intervals[0]);\n    for (int i = 1; i < intervals.length; i++) {\n        int[] last = merged.get(merged.size()-1);\n        int[] next = intervals[i];\n        if (next[0] <= last[1]) last[1] = Math.max(last[1], next[1]);\n        else merged.add(next);\n    }\n    return merged.toArray(new int[merged.size()][]);\n}',tests:'System.out.println(Arrays.deepToString(mergeIntervals(new int[][]{{8,10},{1,3},{2,6},{15,18},{6,8}})));\nSystem.out.println(Arrays.deepToString(mergeIntervals(new int[][]{{1,4},{4,5}})));\nSystem.out.println(Arrays.deepToString(mergeIntervals(new int[][]{{5,7},{2,3},{3,4}})));',expected:"[[1, 10], [15, 18]]\n[[1, 5]]\n[[2, 4], [5, 7]]"},
-    6:{language:"java",round:2,title:"Longest Subarray With Target Sum · Java",text:"Fix this Java method to return the longest contiguous subarray length whose sum equals target, including negative values. Aim for O(n).",hint:"Use prefix sums and a map storing the earliest index for each prefix sum.",difficulty:"EXPERT",code:'static int longestTargetSubarray(int[] values, int target) {\n    Map<Integer,Integer> firstSeen = new HashMap<>();\n    firstSeen.put(0,0);\n    int prefix=0, best=0;\n    for (int i=0;i<values.length;i++) {\n        prefix += values[i];\n        int needed = prefix-target;\n        if (firstSeen.containsKey(needed)) best=Math.max(best,i+1-firstSeen.get(needed));\n        firstSeen.put(prefix,i+1);\n    }\n    return best;\n}',tests:'System.out.println(longestTargetSubarray(new int[]{10,5,2,7,1,9},15));\nSystem.out.println(longestTargetSubarray(new int[]{1,-1,5,-2,3},3));\nSystem.out.println(longestTargetSubarray(new int[]{-2,-1,2,1},0));',expected:"4\n4\n4"}
+    1:{language:"python",round:1,title:"Second-Largest Distinct Number",text:"Find the second-largest DISTINCT number in the list. Return None if no second distinct number exists.",hint:"Check duplicate maximum values, negative numbers, and lists with fewer than two distinct values.",difficulty:"EASY–MEDIUM",code:'def second_largest(nums):\n    largest = nums[0]\n    second = nums[1]\n    for n in nums:\n        if n > largest:\n            second = largest\n            largest = n\n        elif n > second:\n            second = n\n    return second',tests:'\nprint(second_largest([10,5,10,8,3]))\nprint(second_largest([-4,-1,-9,-2]))\nprint(second_largest([7,7,7]))\nprint(second_largest([2,1]))',expected:"8\n-2\nNone\n1"},
+    2:{language:"python",round:1,title:"First Non-Repeating Character",text:"Return the first character that appears exactly once in the entire string. Return -1 if every character repeats.",hint:"A character that appears once early may repeat later. Count the whole string before choosing the answer.",difficulty:"MEDIUM",code:'def first_unique(text):\n    seen = set()\n    for ch in text:\n        if ch not in seen:\n            return ch\n        seen.add(ch)\n    return -1',tests:'\nprint(first_unique("aabbcddee"))\nprint(first_unique("swiss"))\nprint(first_unique("aabb"))\nprint(first_unique("programming"))',expected:"c\nw\n-1\np"},
+    3:{language:"java",round:2,title:"Balanced Brackets",text:"Return true only when (), [] and {} are correctly matched and nested. Counting opening and closing brackets is not enough; their order and types matter.",hint:"Use a stack. On a closing bracket, verify the stack is not empty and the top is its matching opener.",difficulty:"MEDIUM–HARD",code:'static boolean isBalanced(String text) {\n    int open = 0;\n    for (int i = 0; i < text.length(); i++) {\n        char ch = text.charAt(i);\n        if (ch == \'(\' || ch == \'[\' || ch == \'{\') open++;\n        else if (ch == \')\' || ch == \']\' || ch == \'}\') open--;\n        if (open < 0) return false;\n    }\n    return open == 0;\n}',tests:'System.out.println(isBalanced("{[()]}"));\nSystem.out.println(isBalanced("([)]"));\nSystem.out.println(isBalanced("((("));\nSystem.out.println(isBalanced(""));\nSystem.out.println(isBalanced("{[]}"));',expected:"true\nfalse\nfalse\ntrue\ntrue"},
+    4:{language:"java",round:2,title:"Maximum Subarray Sum",text:"Return the maximum sum of any non-empty contiguous subarray. The input may contain negative numbers; do not return zero unless the correct maximum is zero.",hint:"Track the best sum ending at the current position separately from the best sum seen overall.",difficulty:"HARD",code:'static int maxSubarraySum(int[] nums) {\n    int current = 0;\n    int best = 0;\n    for (int n : nums) {\n        current = Math.max(n, current + n);\n        best = Math.max(best, current);\n    }\n    return best;\n}',tests:'System.out.println(maxSubarraySum(new int[]{-2,1,-3,4,-1,2,1,-5,4}));\nSystem.out.println(maxSubarraySum(new int[]{-8,-3,-6,-2,-5,-4}));\nSystem.out.println(maxSubarraySum(new int[]{5}));\nSystem.out.println(maxSubarraySum(new int[]{2,3,-1,4}));',expected:"6\n-2\n5\n8"}
   };
   const validationTests = Object.fromEntries(Object.entries(tasks).map(([id,t])=>[id,t.tests]));
   const expectedOutputs = Object.fromEntries(Object.entries(tasks).map(([id,t])=>[id,t.expected]));
   let currentQuestion = 1;
-  const timeLeft = {1:600, 2:600, 3:600, 4:600, 5:600, 6:600};
-  const solved = {1:false, 2:false, 3:false, 4:false, 5:false, 6:false};
+  const timeLeft = {1:600, 2:600};
+  const solved = {1:false, 2:false, 3:false, 4:false};
   let seconds = 600;
   let submitting = false;
   let countdown = null;
@@ -248,7 +246,7 @@
   let runHadError = false;
   let runTimer = null;
   let submittedCode = "";
-  const attemptedQuestions = {1:false, 2:false, 3:false, 4:false, 5:false, 6:false};
+  const attemptedQuestions = {1:false, 2:false, 3:false, 4:false};
   let finalResultSubmitted = false;
   let registered = false;
 
@@ -262,14 +260,14 @@
   function showQuestion(questionId, resetTime = true) {
     currentQuestion=questionId;
     const task=tasks[questionId];
-    for(let id=1;id<=6;id++) $("question"+id).setAttribute("aria-pressed",String(id===questionId));
+    for(let id=1;id<=4;id++) $("question"+id).setAttribute("aria-pressed",String(id===questionId));
     $("questionTitle").textContent=task.title;
     $("questionText").textContent=task.text;
     $("taskHint").textContent=task.hint;
     $("difficulty").textContent=task.difficulty;
     $("code").value=task.code;
     $("fileName").textContent=task.language==="java"?"Main.java · method":"main.py";
-    seconds=timeLeft[questionId]; updateTimer(); startTimer();
+    seconds=timeLeft[task.round]; updateTimer(); startTimer();
     $("runBtn").disabled=!registered || (task.language==="python" && !ready);
     $("submitBtn").disabled=!registered || (task.language==="python" && !ready) || seconds<=0 || solved[questionId];
     $("submitBtn").textContent=solved[questionId]?"✓ Correct":"✓ Submit answer";
@@ -289,12 +287,12 @@
     countdown = setInterval(() => {
       if (seconds > 0) {
         seconds--;
-        timeLeft[currentQuestion] = seconds;
+        timeLeft[tasks[currentQuestion].round] = seconds;
         updateTimer();
       } else {
         clearInterval(countdown);
         countdown = null;
-        timeLeft[currentQuestion] = 0;
+        timeLeft[tasks[currentQuestion].round] = 0;
         $("runBtn").disabled = true;
         $("submitBtn").disabled = true;
         setStatus("TIME UP", "error");
@@ -378,11 +376,11 @@
   let leaderboardCallbackId = 0;
 
   function updateFinalSubmitButton() {
-    const allAttempted = [1, 2, 3, 4, 5, 6].every((id) => attemptedQuestions[id]);
+    const allAttempted = [1, 2, 3, 4].every((id) => attemptedQuestions[id]);
     $("finalSubmitBtn").disabled = !allAttempted || finalResultSubmitted;
     $("finalSubmitBtn").textContent = finalResultSubmitted ? "✓ Result submitted" : "Submit final result";
     $("finalSubmitHint").textContent = allAttempted
-      ? "All six Python and Java challenges have been submitted. You can now submit your final score."
+      ? "All four challenges have been submitted. You can now submit your final score."
       : "Submit an answer for each of the six challenges to unlock your final result.";
   }
 
@@ -392,7 +390,7 @@
     const memberNames = [1, 2, 3].slice(0, participantCount)
       .map((n) => $("member" + n + "Name").value.trim());
     const name = participantCount === 1 ? memberNames[0] : teamName;
-    const marks = [1, 2, 3, 4, 5, 6].map((id) => solved[id] ? 10 : 0);
+    const marks = [1, 2, 3, 4].map((id) => solved[id] ? 10 : 0);
     const payload = {
       finalResult: true,
       name, teamName, participantCount, memberNames,
@@ -413,11 +411,11 @@
   }
 
   async function submitFinalResult() {
-    if (finalResultSubmitted || ![1, 2, 3, 4, 5, 6].every((id) => attemptedQuestions[id])) return;
-    const score = [1, 2, 3, 4, 5, 6].filter((id) => solved[id]).length * 10;
-    const percentage = Number((score / 60 * 100).toFixed(2));
+    if (finalResultSubmitted || ![1, 2, 3, 4].every((id) => attemptedQuestions[id])) return;
+    const score = [1, 2, 3, 4].filter((id) => solved[id]).length * 10;
+    const percentage = Number((score / 40 * 100).toFixed(2));
     $("finalResult").hidden = false;
-    $("finalScore").textContent = score + " / 60";
+    $("finalScore").textContent = score + " / 40";
     $("finalPercentage").textContent = percentage + "%";
     $("finalMessage").textContent = score === 60
       ? "Excellent work — all six challenges solved!"
@@ -586,21 +584,21 @@
     printOutput("Starter code restored. Your edits were cleared.");
     setStatus(ready ? "READY" : "RUNTIME LOADING…", ready ? "ready" : "running");
   });
-  for (let id=1;id<=6;id++) $("question"+id).addEventListener("click",()=>{if(!running)showQuestion(id);});
+  for (let id=1;id<=4;id++) $("question"+id).addEventListener("click",()=>{if(!running && tasks[id].round===Number($("round1Tab").getAttribute("aria-pressed")==="true"?1:2))showQuestion(id);});
   // Round 2 uses question 3; keep it accessible without requiring a missing tab element.
   $("round1Tab").addEventListener("click", () => {
     if (running) return;
     $("round1Tab").setAttribute("aria-pressed", "true");
     $("round2Tab").setAttribute("aria-pressed", "false");
     $("round1Questions").style.display = "flex";
-    showQuestion(currentQuestion===2||currentQuestion===4||currentQuestion===5?currentQuestion:1);
+    showQuestion(currentQuestion===2?2:1);
   });
   $("round2Tab").addEventListener("click", () => {
     if (running) return;
     $("round1Tab").setAttribute("aria-pressed", "false");
     $("round2Tab").setAttribute("aria-pressed", "true");
     $("round1Questions").style.display = "flex";
-    showQuestion(currentQuestion===6?6:3);
+    showQuestion(currentQuestion===4?4:3);
   });
   // Welcome screen: enter the arena to reveal registration and the challenge.
   $("enterArenaBtn").addEventListener("click", () => {
@@ -631,7 +629,7 @@
     $("registerStartBtn").disabled = true;
     $("registerStartBtn").textContent = "✓ Registered — Challenge Started";
     startTimer();
-    printOutput("Registration complete. Your first 10-minute challenge timer has started. Complete all six challenges to submit your result.");
+    printOutput("Registration complete. Your first 10-minute challenge timer has started. Complete all four challenges to submit your result.");
     setStatus(ready ? "READY" : "RUNTIME LOADING…", ready ? "ready" : "running");
     $("runBtn").disabled = !ready;
     $("submitBtn").disabled = !ready;
