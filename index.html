@@ -275,7 +275,7 @@
     setStatus(task.language==="python"&&!ready?"PYTHON LOADING…":"READY",task.language==="python"&&!ready?"running":"ready");
   }
   function updateTimer() {
-    timeLeft[currentQuestion] = seconds;
+    timeLeft[tasks[currentQuestion].round] = seconds;
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     $("timer").textContent = String(mins).padStart(2, "0") + ":" + String(secs).padStart(2, "0");
@@ -381,7 +381,7 @@
     $("finalSubmitBtn").textContent = finalResultSubmitted ? "✓ Result submitted" : "Submit final result";
     $("finalSubmitHint").textContent = allAttempted
       ? "All four challenges have been submitted. You can now submit your final score."
-      : "Submit an answer for each of the six challenges to unlock your final result.";
+      : "Submit an answer for each of the four challenges to unlock your final result.";
   }
 
   function sendFinalResultToSheet(score) {
@@ -398,9 +398,9 @@
       department: $("participantDepartment").value.trim(),
       college: $("participantCollege").value.trim(),
       timeTaken: Object.keys(timeLeft).reduce((total, id) => total + (600 - timeLeft[id]), 0),
-      score, total: 60,
-      q1: marks[0], q2: marks[1], q3: marks[2], q4: marks[3], q5: marks[4], q6: marks[5],
-      percentage: Number((score / 60 * 100).toFixed(2))
+      score, total: 40,
+      q1: marks[0], q2: marks[1], q3: marks[2], q4: marks[3],
+      percentage: Number((score / 40 * 100).toFixed(2))
     };
     return fetch(SHEETS_ENDPOINT, {
       method: "POST",
@@ -417,8 +417,8 @@
     $("finalResult").hidden = false;
     $("finalScore").textContent = score + " / 40";
     $("finalPercentage").textContent = percentage + "%";
-    $("finalMessage").textContent = score === 60
-      ? "Excellent work — all six challenges solved!"
+    $("finalMessage").textContent = score === 40
+      ? "Excellent work — all four challenges solved!"
       : "Your final result has been submitted. Thank you for participating!";
     await sendFinalResultToSheet(score);
     finalResultSubmitted = true;
@@ -585,7 +585,7 @@
     setStatus(ready ? "READY" : "RUNTIME LOADING…", ready ? "ready" : "running");
   });
   for (let id=1;id<=4;id++) $("question"+id).addEventListener("click",()=>{if(!running && tasks[id].round===Number($("round1Tab").getAttribute("aria-pressed")==="true"?1:2))showQuestion(id);});
-  // Round 2 uses question 3; keep it accessible without requiring a missing tab element.
+  // Round 2 contains the two Java challenges.
   $("round1Tab").addEventListener("click", () => {
     if (running) return;
     $("round1Tab").setAttribute("aria-pressed", "true");
