@@ -535,11 +535,10 @@ print("Five or less")</textarea>
   $("enterArenaBtn").addEventListener("click", () => {
     $("welcomeScreen").style.transition = "opacity .35s ease";
     $("welcomeScreen").style.opacity = "0";
-    setTimeout(() => { $("welcomeScreen").remove(); $("member1Name").focus(); }, 360);
+    setTimeout(() => { $("welcomeScreen").remove(); $("member1Name").focus(); startTimer(); }, 360);
   });
   // Plain textarea intentionally has no indentation, autocomplete, or bracket-pair helpers.
   updateTimer();
-  startTimer();
   spawnWorker();
 })();
 </script>
