@@ -136,7 +136,7 @@
       <p id="finalSubmitHint">Submit an answer for each of the four challenges to unlock your final result.</p>
       <button class="btn submit" id="finalSubmitBtn" type="button" disabled>Submit final result</button>
       <div id="finalResult" class="final-result" hidden>
-        <div><span>Your score</span><strong id="finalScore">0 / 30</strong></div>
+        <div><span>Your score</span><strong id="finalScore">0 / 40</strong></div>
         <div><span>Percentage</span><strong id="finalPercentage">0%</strong></div>
         <p id="finalMessage"></p>
       </div>
@@ -516,7 +516,7 @@
         sorted.forEach((person, index) => {
           const tr = document.createElement("tr");
           [String(index + 1), person.name || "Participant", person.college || "—",
-            (Number(person.score) || 0) + " / 60",
+            (Number(person.score) || 0) + " / 40",
             (Number(person.percentage) || 0).toFixed(2) + "%"].forEach((value, cellIndex) => {
               const td = document.createElement("td");
               td.textContent = value;
