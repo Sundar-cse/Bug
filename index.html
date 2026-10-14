@@ -574,6 +574,11 @@
     });
   }
 
+  function normalizeProgramOutput(value) {
+    return String(value || "").replace(/\r\n?/g, "\n").split("\n")
+      .map(line => line.trim().replace(/[ \t]+/g, " ")).join("\n").trim();
+  }
+
   async function executeJava(isSubmission, code) {
     const task=tasks[currentQuestion];
     const source='import java.util.*;\npublic class Main {\n'+code+'\npublic static void main(String[] args) {\n'+task.tests+'\n}\n}';
@@ -598,7 +603,7 @@
       const output=(result.stdout||"").trim();
       if(isSubmission) {
         attemptedQuestions[currentQuestion]=true;
-        if(output===expectedOutputs[currentQuestion]) {solved[currentQuestion]=true;printOutput("Correct answer! Java challenge cleared.");setStatus("CORRECT","ready");$("submitBtn").textContent="✓ Correct";sendSubmission(currentQuestion,"correct",output,code);}
+        if(normalizeProgramOutput(output)===normalizeProgramOutput(expectedOutputs[currentQuestion])) {solved[currentQuestion]=true;printOutput("Correct answer! Java challenge cleared.");setStatus("CORRECT","ready");$("submitBtn").textContent="✓ Correct";sendSubmission(currentQuestion,"correct",output,code);}
         else {printOutput("Incorrect answer — retry. Output received:\n"+(output||"(no output)"));setStatus("INCORRECT","error");sendSubmission(currentQuestion,"incorrect",output,code);}
         updateFinalSubmitButton();
       } else {printOutput(output||"Program finished without printing anything.");setStatus("FINISHED","ready");}
