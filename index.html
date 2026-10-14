@@ -717,6 +717,9 @@
   $("code").readOnly = true;
   $("runBtn").disabled = true;
   $("submitBtn").disabled = true;
+  // Initialize every visible challenge field from the same task data used by the tabs.
+  // This prevents the old hard-coded HTML question from appearing on the first page load.
+  showQuestion(1, false);
   // Plain textarea intentionally has no indentation, autocomplete, or bracket-pair helpers.
   updateTimer();
   spawnWorker();
