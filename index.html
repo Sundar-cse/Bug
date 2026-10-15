@@ -27,6 +27,12 @@
     .participant-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0 8px;padding:14px;border:1px solid var(--line);background:#172117}.participant-fields label{display:block;color:var(--muted);font-size:11px;font-weight:800;letter-spacing:1px;margin-bottom:5px}.participant-fields input{width:100%;min-width:0;padding:10px 11px;border:1px solid var(--line);border-radius:3px;background:#0b120b;color:var(--text);font:14px system-ui,sans-serif}.participant-fields input:focus{outline:2px solid var(--green2);outline-offset:1px}.actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:13px 15px;background:#172117}.btn{border:1px solid #496342;border-radius:3px;padding:10px 15px;font-weight:800;font-size:12px;letter-spacing:.3px;cursor:pointer;color:var(--text);background:#263825}.btn.primary{background:var(--green);border-color:var(--green);color:#14200e}.btn.submit{background:#d9eac3;border-color:#d9eac3;color:#15210f}.btn:disabled{opacity:.55;cursor:wait}.hint{font-size:11px;color:var(--muted);margin-left:auto}
     .output{border-top:1px solid var(--line)}.outputhead{padding:11px 15px;display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:11px;letter-spacing:1px}.status{font-size:10px;font-weight:900;letter-spacing:.5px}.status.ready{color:var(--green)}.status.error{color:var(--red)}.status.running{color:var(--orange)}pre{margin:0;min-height:86px;max-height:190px;overflow:auto;padding:14px 16px 17px;background:#0b120b;color:#d8e5c8;font:13px/1.6 ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere}.leaderboard{margin:20px 0 24px;background:#172117;border:1px solid var(--line);box-shadow:4px 4px 0 #111a10;overflow:hidden}.leaderboard-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 17px;background:#202f1e;border-bottom:1px solid var(--line)}.leaderboard-head h2{font-size:12px;letter-spacing:1.4px;margin:0}.leaderboard-wrap{overflow-x:auto}.leaderboard table{width:100%;border-collapse:collapse;min-width:470px;text-align:left;font-size:13px}.leaderboard th,.leaderboard td{padding:11px 14px;border-bottom:1px solid #30452d}.leaderboard th{color:var(--muted);font-size:10px;letter-spacing:1px;background:#111a11}.leaderboard td{color:var(--text)}.leaderboard td.score{color:var(--green);font-weight:900}.leaderboard-empty{padding:16px;color:var(--muted);font-size:13px}.leaderboard-actions{display:flex;align-items:center;gap:10px}.leaderboard-actions .btn{padding:7px 10px}.leaderboard-status{font-size:11px;color:var(--muted)}.bottomnote{margin:19px 2px;color:var(--muted);font-size:12px}
     .final-result-card{margin-top:14px}.final-result-body{padding:16px;display:flex;flex-direction:column;align-items:flex-start;gap:12px}.final-result-body p{margin:0;color:var(--muted);font-size:13px}.final-result{width:100%;border:1px solid var(--green);border-radius:8px;background:#152315;padding:16px;display:flex;gap:24px;flex-wrap:wrap}.final-result[hidden]{display:none}.final-result div{display:flex;flex-direction:column;gap:5px}.final-result span{font-size:11px;color:var(--muted);text-transform:uppercase}.final-result strong{font-size:24px;color:var(--green)}.final-result #finalMessage{flex-basis:100%;color:var(--text)}
+    .final-result-card.complete{animation:resultGlow 1s ease-in-out 3;border-color:var(--green)}
+    .result-lights{display:none;gap:8px;align-items:center;flex-wrap:wrap;color:var(--green);font-weight:900;letter-spacing:1px}
+    .final-result-card.complete .result-lights{display:flex}
+    .result-light{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 16px var(--green);animation:pulseGlow .7s infinite alternate}
+    .result-download-actions{display:flex;gap:10px;flex-wrap:wrap}
+    @keyframes resultGlow{0%,100%{box-shadow:4px 4px 0 #111a10}50%{box-shadow:0 0 28px #a8f05b88}}
     /* BUG-404 cinematic welcome screen */
     .welcome-screen{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at 50% 45%,#243b25 0%,#10170f 54%,#080d09 100%);color:#f0f4df;padding:24px}
     .welcome-grid{position:absolute;inset:0;opacity:.2;background-image:linear-gradient(#a8f05b22 1px,transparent 1px),linear-gradient(90deg,#a8f05b22 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,transparent,#000 20%,#000 80%,transparent)}
@@ -131,10 +137,12 @@
   </section>
 
   <section class="card final-result-card">
-    <div class="cardhead"><h2>FINAL RESULT</h2><span class="pill">6 CHALLENGES · 60 POINTS</span></div>
+    <div class="cardhead"><h2>FINAL RESULT</h2><span class="pill">4 CHALLENGES · 40 POINTS</span></div>
     <div class="final-result-body">
       <p id="finalSubmitHint">Submit an answer for each of the four challenges to unlock your final result.</p>
       <button class="btn submit" id="finalSubmitBtn" type="button" disabled>Submit final result</button>
+      <div class="result-lights" aria-live="polite"><i class="result-light"></i><i class="result-light"></i><i class="result-light"></i> TEAM FINISHED · RESULT REPORT READY</div>
+      <div class="result-download-actions"><button class="btn primary" id="downloadResultBtn" type="button" disabled>⬇ Download result backup</button></div>
       <div id="finalResult" class="final-result" hidden>
         <div><span>Your score</span><strong id="finalScore">0 / 40</strong></div>
         <div><span>Percentage</span><strong id="finalPercentage">0%</strong></div>
@@ -264,6 +272,7 @@
   let runHadError = false;
   let runTimer = null;
   let submittedCode = "";
+  const submissionRecords = [];
   const attemptedQuestions = {1:false, 2:false, 3:false, 4:false};
   let finalResultSubmitted = false;
   let registered = false;
@@ -422,6 +431,7 @@
       const expected = expectedOutputs[currentQuestion];
       const isCorrect = !hasError && text.trim() === expected;
       attemptedQuestions[currentQuestion] = true;
+      recordSubmission(currentQuestion, isCorrect ? "correct" : "incorrect", text, submittedCode);
       if (isCorrect) {
         solved[currentQuestion] = true;
         printOutput("Correct answer! Challenge cleared.");
@@ -486,11 +496,15 @@
     const score = [1, 2, 3, 4].filter((id) => solved[id]).length * 10;
     const percentage = Number((score / 40 * 100).toFixed(2));
     $("finalResult").hidden = false;
+    $("downloadResultBtn").disabled = false;
     $("finalScore").textContent = score + " / 40";
     $("finalPercentage").textContent = percentage + "%";
     $("finalMessage").textContent = score === 40
       ? "Excellent work — all four challenges solved!"
       : "Your final result has been submitted. Thank you for participating!";
+    $("finalResult").closest(".final-result-card").classList.add("complete");
+    // Download the local backup before awaiting Sheets; it works independently of the spreadsheet.
+    downloadResultBackup(score);
     await sendFinalResultToSheet(score);
     finalResultSubmitted = true;
     $("finalSubmitBtn").disabled = true;
@@ -556,7 +570,64 @@
     document.head.appendChild(script);
   }
 
+  function recordSubmission(questionId, status, output, code) {
+    submissionRecords.push({
+      questionId, question: tasks[questionId].title, language: tasks[questionId].language,
+      round: tasks[questionId].round, status, marks: status === "correct" ? 10 : 0,
+      submittedAt: new Date().toISOString(), code: String(code || ""), output: String(output || "")
+    });
+  }
+
+  function downloadResultBackup(score) {
+    const count = Number($("participantCount").value || 1);
+    const memberNames = [1, 2, 3].slice(0, count).map(n => $("member" + n + "Name").value.trim());
+    const report = {
+      event: "BUG-404 Debugging Challenge", reportType: "Participant result and code backup",
+      generatedAt: new Date().toISOString(), teamId,
+      teamName: count >= 2 ? $("teamName").value.trim() : "",
+      participantName: count === 1 ? memberNames[0] : $("teamName").value.trim(),
+      participantCount: count, memberNames,
+      year: $("participantYear").value.trim(), department: $("participantDepartment").value.trim(),
+      college: $("participantCollege").value.trim(), score, totalMarks: 40,
+      percentage: Number((score / 40 * 100).toFixed(2)),
+      questionResults: [1,2,3,4].map(id => ({
+        questionId:id, title:tasks[id].title, language:tasks[id].language, round:tasks[id].round,
+        solved:!!solved[id], marks:solved[id]?10:0,
+        latestSubmission:[...submissionRecords].reverse().find(item=>item.questionId===id)||null
+      })),
+      allSubmissions: submissionRecords
+    };
+    const lines = [
+      "BUG-404 — PARTICIPANT RESULT BACKUP", "===================================",
+      "Generated: " + report.generatedAt, "Team ID: " + report.teamId,
+      "Team/Participant: " + (report.teamName || report.participantName),
+      "Participants: " + memberNames.join(", "), "Year: " + report.year,
+      "Department: " + report.department, "College: " + report.college, "",
+      "FINAL SCORE: " + score + " / 40 (" + report.percentage + "%)", "", "QUESTION SUMMARY",
+      ...report.questionResults.map(q => q.questionId + ". " + q.title + " [" + q.language.toUpperCase() + "] — " + (q.solved ? "CORRECT (10/10)" : "NOT SOLVED (0/10)")),
+      "", "SUBMITTED CODE AND OUTPUTS", "==========================",
+      ...submissionRecords.map((item,index) => [
+        "", "Attempt " + (index+1) + " — Q" + item.questionId + ": " + item.question,
+        "Language: " + item.language + " | Status: " + item.status.toUpperCase() + " | Marks: " + item.marks + "/10",
+        "Submitted: " + item.submittedAt, "CODE:", item.code || "(empty)",
+        "OUTPUT / RESULT:", item.output || "(no output)", "-----------------------------------"
+      ].join("\n")),
+      "", "MACHINE-READABLE JSON BACKUP", JSON.stringify(report,null,2),
+      "", "This local file is a backup of what the browser recorded. It does not prove Google Sheets saved the result."
+    ];
+    const blob = new Blob([lines.join("\n")], {type:"text/plain;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    const safeName = (report.teamName || report.participantName || "participant").replace(/[^a-z0-9_-]+/gi,"_").slice(0,50);
+    link.href = url; link.download = "BUG404_" + safeName + "_result_backup.txt";
+    document.body.appendChild(link); link.click(); link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+    $("downloadResultBtn").disabled = false;
+    $("downloadResultBtn").textContent = "⬇ Download result backup again";
+  }
+
   function sendSubmission(questionId, status, output, code) {
+    if (tasks[questionId].language === "java") recordSubmission(questionId, status, output, code);
     const participantCount = Number($("participantCount").value || 1);
     const teamName = participantCount >= 2 ? $("teamName").value.trim() : "";
     const participantCountForName = participantCount;
@@ -652,6 +723,10 @@
   $("submitBtn").addEventListener("click", () => executeCode(true));
   $("refreshLeaderboard").addEventListener("click", loadLeaderboard);
   $("finalSubmitBtn").addEventListener("click", submitFinalResult);
+  $("downloadResultBtn").addEventListener("click", () => {
+    if ($("finalResult").hidden) return;
+    downloadResultBackup([1,2,3,4].filter(id=>solved[id]).length*10);
+  });
   loadLeaderboard();
   updateFinalSubmitButton();
 
