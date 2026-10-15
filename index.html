@@ -173,6 +173,20 @@
     "member3Name"
   ];
   const participantStorageKey = "bug404ParticipantDetails";
+  let teamId = "";
+  let teamSignature = "";
+
+  function getParticipantSignature() {
+    return JSON.stringify(participantFieldIds.map((id) => {
+      const field = $(id);
+      return field ? field.value.trim() : "";
+    }));
+  }
+
+  function createTeamId() {
+    return "BUG404-" + Date.now().toString(36).toUpperCase() + "-" +
+      Math.random().toString(36).slice(2, 10).toUpperCase();
+  }
 
   function saveParticipantDetails() {
     const details = {};
@@ -180,6 +194,8 @@
       const field = $(id);
       if (field) details[id] = field.value;
     });
+    details.teamId = teamId;
+    details.teamSignature = teamSignature;
     try {
       sessionStorage.setItem(participantStorageKey, JSON.stringify(details));
     } catch (error) {}
@@ -190,6 +206,8 @@
       const saved = sessionStorage.getItem(participantStorageKey);
       if (!saved) return;
       const details = JSON.parse(saved);
+      if (typeof details.teamId === "string") teamId = details.teamId;
+      if (typeof details.teamSignature === "string") teamSignature = details.teamSignature;
       participantFieldIds.forEach((id) => {
         const field = $(id);
         if (field && typeof details[id] === "string") {
@@ -445,6 +463,7 @@
     const marks = [1, 2, 3, 4].map((id) => solved[id] ? 10 : 0);
     const payload = {
       finalResult: true,
+      teamId,
       name, teamName, participantCount, memberNames,
       year: $("participantYear").value.trim(),
       department: $("participantDepartment").value.trim(),
@@ -550,6 +569,7 @@
     const college = $("participantCollege").value.trim();
     const timeTaken = Object.keys(timeLeft).reduce((total, id) => total + (600 - timeLeft[id]), 0);
     const payload = {
+      teamId,
       name,
       teamName,
       participantCount,
@@ -679,6 +699,11 @@
       setStatus("REGISTRATION REQUIRED", "error");
       $(missing[0]).focus();
       return;
+    }
+    const currentTeamSignature = getParticipantSignature();
+    if (!teamId || teamSignature !== currentTeamSignature) {
+      teamId = createTeamId();
+      teamSignature = currentTeamSignature;
     }
     registered = true;
     $("code").readOnly = false;
